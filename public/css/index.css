@@ -1,0 +1,75 @@
+body {
+    padding: 0;
+    margin: 0;
+}
+.parent_container {
+    display: flex;
+    height: 100vh;
+    flex-direction: column;
+    width: 100%;
+}
+.text-box {
+    position: fixed;
+    display: flex;
+    justify-content: center;
+    /* flex-direction: column; */
+    width: 100%;
+    height: 50px;
+    bottom: 0;
+    padding-bottom: 15px;
+}
+.container {
+    width: calc(100% - 160px);
+    padding: 0 80px;
+}
+.send_msg {
+    width: 100%;
+    height: inherit;
+}
+.box {
+    width: 95%;
+    height: inherit;
+}
+.submit {
+    height: inherit;
+}
+.message-div {
+    height: calc(100vh - 130px);
+    width: calc(inherit - 160px)
+}
+.messages {
+    padding: 0;
+}
+.msg {
+    height: 30px;
+    width: inherit;
+    background: #e9e9e9;
+    list-style: none;
+    padding: 10px;
+    margin-bottom: 7px;
+}
+.change_username {
+    
+}
+.is_typing {
+    width: 100%;
+    height: inherit;
+    margin-top: 0;
+}
+.div-small {
+    height: 40px;
+}
+.t_p {
+    height: inherit;
+    width: inherit;
+    margin: 0;
+}
+
+@media screen and (max-width: 768px) {
+    .send_msg {
+        display: flex;
+    }
+    .container {
+        padding: 0 20px;
+    }
+}

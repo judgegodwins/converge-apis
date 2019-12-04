@@ -1,0 +1,23 @@
+
+html
+  head
+    link(rel="stylesheet" href="/css/index.css")
+  body
+    .parent_container
+      .container
+          form
+            input.username(type="text")
+            button.change_username(type="submit") Change Username
+      .message-div.container
+          ul.messages
+      .container.div-small
+        .is_typing
+          p.t_p
+      .text-box.container    
+        form.send_msg(action="")
+          input.box(type="text" required)
+          button.submit(type="submit") Send
+
+    script(src="/socket.io/socket.io.js")
+    script(src="/js/jquery-3.4.1.min.js")
+    script(src="/js/chat.js")
