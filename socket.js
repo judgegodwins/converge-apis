@@ -118,5 +118,5 @@ module.exports = function(io, Model) {
             })
         })
     }
-    console.log(areFriends('judgegodwins', 'reddie'))
+
 }

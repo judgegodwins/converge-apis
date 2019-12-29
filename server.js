@@ -52,7 +52,7 @@ const socket = require('./socket')
 const User = require('./model/User');
 
 
-mongoose.connect('mongodb://localhost:27017/Users', {useNewUrlParser: true}, (err, db) => {
+mongoose.connect(process.env.DATABASE, {useNewUrlParser: true}, (err, db) => {
     console.log('connected');
     auth(app, User)
     routes(app, User);
