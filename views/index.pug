@@ -2,22 +2,32 @@
 html
   head
     link(rel="stylesheet" href="/css/index.css")
+    //- link(rel="stylesheet" href="/css/friends.css")
+
   body
     .parent_container
-      .container
-          form
-            input.username(type="text")
-            button.change_username(type="submit") Change Username
-      .message-div.container
-          ul.messages
-      .container.div-small
-        .is_typing
-          p.t_p
-      .text-box.container    
-        form.send_msg(action="")
-          input.box(type="text" required)
-          button.submit(type="submit") Send
+      .cover
+      .left.friends_div
+        form
+          input(type="text" id="search")
+          button.search_friend(type="submit") Search
+        h1 Friends
+        ul.friends_list
+           each friend in friends
+                    li.friend_obj(data-username=`${friend.username}` data-status="off" data-fullname=`${friend.first_name + ' ' + friend.last_name}`) 
+                        .names
+                          p #{friend.first_name + ' ' + friend.last_name}
+                          p.username='@'+friend.username
+                        .msg_preview
+                          p.msg_content(data-username=`${friend.username}`)
 
+        .results
+
+        
     script(src="/socket.io/socket.io.js")
     script(src="/js/jquery-3.4.1.min.js")
     script(src="/js/chat.js")
+    script(src="/js/search.js")
+    script(src="/js/ui.js")
+
+

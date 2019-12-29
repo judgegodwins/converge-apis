@@ -1,0 +1,26 @@
+html
+  head
+    title Login
+  body(style="display: flex; justify-content: center; align-items: center")
+    form(action="/create_account", method="POST", style="display: flex; flex-direction: column")
+       label(for="username") Username
+       input#username(type="text", placholder="Enter username", name="username")
+
+       label(for="firstname") First name:
+       input#firstname(type="text", name="firstname")
+
+       label(for="surname") Last name:
+       input#surname(type="text", name="lastname")
+
+       label(for="male") Male
+        input#male(type="radio" name="gender" value="male") 
+
+       label(for="female") Female
+        input#female(type="radio" name="gender" value="female") 
+
+       label(for="pass") Password:
+       input#pass(type="password", placholder="Password", name="password")
+
+       button(type="submit") Create account
+    
+    a(href="/login") Already have an account?

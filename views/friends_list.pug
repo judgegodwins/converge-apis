@@ -1,0 +1,12 @@
+html
+    head
+        title Friends
+        link(rel="stylesheet" href="/css/index.css")
+        link(rel="stylesheet" href="/css/friends.css")
+
+    body
+        .friends_div
+            ul.friends_list
+                each friend in friends
+                    li.friend(data-username=`${friend.username}`) #{friend.first_name + ' ' + friend.last_name}
+                        p='@'+friend.username

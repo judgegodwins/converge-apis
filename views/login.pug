@@ -1,0 +1,13 @@
+html
+  head
+    title Login
+  body(style="display: flex; justify-content: center; align-items: center")
+    form(action="/login", method="POST" style="display: flex; flex-direction: column")
+       label(for="username") Username
+       input#username(type="text", placholder="Enter username", name="username")
+       label(for="pass") Password:
+       input#pass(type="password", placholder="Password", name="password")
+
+       button(type="submit") Login
+    
+    a(href="/create_account") Create an account.

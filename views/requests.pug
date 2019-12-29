@@ -1,0 +1,16 @@
+html  
+    head
+        title Requests
+
+    body
+        .requests
+            h1 Friend Requests
+            each val in requests
+                .item
+                    p.name #{val.first_name + ' ' + val.last_name}
+                    p.username #{'@'+val.username}
+                    button.confirm_req(data-username=val.username) Confirm
+
+        script(src="/js/jquery-3.4.1.min.js")
+        script(src="/socket.io/socket.io.js")
+        script(src="/js/requests.js")
