@@ -24,7 +24,12 @@ app.use(session({
     secret: process.env.SESSION_SECRET,
     store: sessionStore,
     resave: false,
-    saveUninitialized: true
+    saveUninitialized: true,
+    cookie: {
+        path: '/',
+        httpOnly: true,
+        maxAge: 1000 * 60 * 60 * 24 * 30
+    }
 }));
 app.use(passport.initialize());
 app.use(passport.session());
@@ -36,8 +41,6 @@ io.use(passportSocketIo.authorize({
     cookieParser: cookieParser
 }))
 
-
-console.log(process.env.SESSION_SECRET)
 
 app.use(express.static('public'))
 app.set('view engine', 'pug')
@@ -52,12 +55,11 @@ const socket = require('./socket')
 const User = require('./model/User');
 
 
-mongoose.connect(process.env.DATABASE, {useNewUrlParser: true}, (err, db) => {
+mongoose.connect('mongodb://localhost:27017/Users', {useNewUrlParser: true}, (err, db) => {
     console.log('connected');
     auth(app, User)
     routes(app, User);
     socket(io, User);
-
 
     server.listen(PORT, ()=> console.log(`Server started on port ${PORT}`));
 })
