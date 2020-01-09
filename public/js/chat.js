@@ -1,3 +1,5 @@
+import {customAjax} from './search.js'
+
 $(function() {
     var socket = io();
     
@@ -13,13 +15,20 @@ $(function() {
             })
 
         } else {
-            $('.messages').append(`<li class="msg msg_recieved">${data.message}</li>`)
+            $('.messages').append(`<li class="msg msg_recieved">${data.message}</li>`);
+
+
+
             if(msgPanel && msgPanel.dataset.username == data.username) {
                 console.log('username is true')
                 // socket.emit('join', {friend: msgPanel.dataset.username})
             } 
         }
+        socket.emit('save_message', {message: data.message, username: data.username})
+
+        console.log(data.message)
     })
+
     $('.change_username').click(function(e) {
         e.preventDefault();
         socket.emit('change_username', $('.username').val());
@@ -58,33 +67,47 @@ $(function() {
         // $('.right').css({'display': 'block'})
         let fullName = this.dataset.fullname,
             username = this.dataset.username,
-            status = this.dataset.status
-        $('.cover').html(`
-        <div class="right panel" data-username="${this.dataset.username}">
-            <div class="container">
-               <div class="holder">
-                  <h4>${fullName}</h4>
-                  <p class"activity_status">${status}</p>
-               </div>
-            </div>
-            <div class="message-div container">
-               <ul class="messages"></ul>
-            </div>
+            status = this.dataset.status;
+        console.log('its here')
 
-            <div class="container div-small">
-                <div class="is_typing">
-                    <p class="t_p"></p>
-
+        customAjax(`/messages?username=${username}`, 'GET', null, function(res) {
+            var messages = JSON.parse(res);
+            console.log(messages)
+            $('.cover').html(`
+            <div class="right panel" data-username="${username}">
+                <div class="container">
+                   <div class="holder">
+                      <h4>${fullName}</h4>
+                      <p class"activity_status">${status}</p>
+                   </div>
                 </div>
-            </div>
-            <div class="text-box container">
-                <form class="send_msg" action="">
-                    <input class="box" type="text" required>
-                    <button class="submit" type"submit">Send</button>
-                </form>
-            </div>
-        </div>`)
-        submitCall();
+                <div class="message-div container"> 
+                   <ul class="messages"></ul>
+                </div>
+    
+                <div class="container div-small">
+                    <div class="is_typing">
+                        <p class="t_p"></p>
+    
+                    </div>
+                </div>
+                <div class="text-box container">
+                    <form class="send_msg" action="">
+                        <input class="box" type="text" required>
+                        <button class="submit" type"submit">Send</button>
+                    </form>
+                </div>
+            </div>`)
+            messages.forEach((message) => {
+                if(message.type === 'sent') {
+                    $('.messages').append(`<li class="msg msg_sent">${message.content}</li>`);
+                } else if(message.type === 'received') {
+                    $('.messages').append(`<li class="msg msg_recieved">${message.content}</li>`);
+                }
+            })
+            submitCall();
+        })
+
     })
     socket.on('typing', function(data) {
         $('.t_p').html(`${data.username} is typing...`)
@@ -101,10 +124,15 @@ $(function() {
     //     }, 5000)
         
     // })
+
+    socket.on('reconnect', function(attempNumber) {
+        socket.emit('suscribe', {username: $('.panel').data('username')})
+    })
+
     function submitCall() {
         $('.submit').click(function(e) {
             e.preventDefault();
-            socket.emit('new_message', $('.box').val());
+            socket.emit('new_message', {message: $('.box').val(), toUser: $('.panel').data('username')});
             $('.messages').append(`<li class="msg msg_sent">${$('.box').val()}</li>`);
             $('.box').val('');
         })

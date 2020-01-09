@@ -37,7 +37,7 @@ $(function() {
 })
 
 
-function customAjax(url, method, wts, callback) {
+export function customAjax(url, method, wts, callback) {
     var req = new XMLHttpRequest();
 
     req.open(method, url);

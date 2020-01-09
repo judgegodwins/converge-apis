@@ -17,7 +17,6 @@ module.exports = function(io, Model) {
             name: socket.username,
             id: socket.id
         });
-        console.log(users)
         socket.on('disconnect', ()=>{
             console.log("user gone", socket.id)
             // users.splice(users.indexOf(users.filter((x) => {
@@ -25,7 +24,8 @@ module.exports = function(io, Model) {
             // })), 1)
             // console.log(users);
             // socket.emit('connected user disconnected', socket.username);
-        })
+        });
+
 
 
         var currentJoined
@@ -38,19 +38,71 @@ module.exports = function(io, Model) {
                     currentJoined = user.id;
 
                     // console.log(currentJoined)
-                    io.to(user.id).emit('new_msg', {message: 'hello this is a private message we are in a chat room', username: socket.username})
+                    Model.findOne({username: socket.request.user.username}, (err, person) => {
+                        if(!person) console.log('no user')
+                        person.friends.forEach((friend) => {
+
+                            if(user.name === friend.username) {
+                                users.forEach((owner) => {
+                                    if(owner.name === socket.request.user.username) {
+                                        console.log(owner.name,' ', owner.id)
+                                        socket.to(owner.id).emit('get_messages', {messages: friend.messages})
+                                    }
+                                })
+                            }
+                        })
+                    })
+                    // io.to(user.id).emit('new_msg', {message: 'hello this is a private message we are in a chat room', username: socket.username})
                 }
             }
         })
         // io.to(socket.id).emit('handle', handle)
         socket.on('new_message', (data) => {
             console.log(currentJoined)
-            socket.to(currentJoined).emit('new_msg', {message: data, username: socket.username});
+            console.log('received new message: ', data.message)
+             Model.findOne({username: socket.request.user.username}, (err, user) => {
+                user.friends.forEach((friend) => {
+                    if(friend.username === data.toUser) {
+                        friend.messages.push({
+                            content: data.message,
+                            type: 'sent'
+                        })
+
+                    }
+                })
+                user.save((err, update) => {
+                    if(err) console.log(err);
+                    socket.to(currentJoined).emit('new_msg', {message: data.message, username: socket.username});
+                });
+            })
         })
 
-        // socket.on('change_username', function(username) {
-        //     socket.username = username;
-        // })
+        socket.on('save_message', (data) => {
+            Model.findOne({username: socket.request.user.username}, (err, user) => {
+                user.friends.forEach((friend) => {
+                    if(friend.username === data.username) {
+                        
+                        friend.messages.push({
+                            content: data.message,
+                            type: 'received'
+                        });
+
+                    }
+                })
+
+                user.save((err, data) => {
+                    if(err) console.log(err);
+                });
+            })
+        })
+        socket.on('suscribe', (data) => {
+            console.log(data.username, ' ', 'trying to reconnect')
+            users.forEach((user) => {
+                if(user.name === data.username) {
+                    socket.join(user.id)
+                }
+            })
+        })
         socket.on('typing', (data) => {
             socket.broadcast.emit('typing', {username: socket.username});
         })
@@ -98,6 +150,10 @@ module.exports = function(io, Model) {
         })
     })
 
+
+    /* Defining functions
+    * for reuse
+    */
     let count = 0
     function areFriends(user1, user2) {
         Model.findOne({username: user1}, (err, user) => {
@@ -118,5 +174,7 @@ module.exports = function(io, Model) {
             })
         })
     }
+
+    
 
 }

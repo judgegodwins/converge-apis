@@ -20,6 +20,7 @@ module.exports = function(app, model) {
     })
 
     passport.deserializeUser((id, done) => {
+        console.log('deserialising user...')
         model.findById(id, (err, user) => {
             if(err) return done(err);
 

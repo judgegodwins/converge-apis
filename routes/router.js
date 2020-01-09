@@ -51,6 +51,7 @@ module.exports = function(app, Model) {
         res.render('index', {friends: req.user.friends.filter((friend) => {
             return friend.friends_status === true;
         })});
+        console.log(req.session)
         // var io = require('../socket')();
     })
 
@@ -73,7 +74,8 @@ module.exports = function(app, Model) {
                 username: req.user.username,
                 first_name: req.user.first_name,
                 last_name: req.user.last_name,
-                friends_status: false
+                friends_status: false,
+                messages: []
             })
             console.log(req.user)
             user.save((err, data) => {
@@ -88,7 +90,8 @@ module.exports = function(app, Model) {
                 username: sentTo.username,
                 first_name: sentTo.first_name,
                 last_name: sentTo.last_name,
-                friends_status: false
+                friends_status: false,
+                messages: []
             })
             user.save((err, data) => {
                 if(err) console.log(err);
@@ -119,6 +122,20 @@ module.exports = function(app, Model) {
         res.render('friends_list', {friends: req.user.friends.filter((friend) => {
             return friend.friends_status === true;
         })});
+    })
+    app
+    .route('/messages')
+    .get(ensureAuthenticated, (req, res) => {
+        const username = req.query.username;
+
+        Model.findById(req.user._id, (err, user) => {
+            user.friends.forEach((friend) => {
+                if(username === friend.username) {
+                    const messages = friend.messages;
+                    res.send(messages);
+                }
+            });
+        })
     })
 
     app.get('/rem', (req, res) => {
