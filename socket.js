@@ -6,53 +6,62 @@ module.exports = function(io, Model) {
 
     io.on('connection', (socket)=>{
         console.log('we have a new connection')
+        console.log(socket.id)
 
         socket.username = socket.request.user.username;
+
         // socket.id = socket.request.user.id;
         socket.status = 'online';
-
-        socket.broadcast.emit('online', {username: socket.request.user.username})
+ 
+        // socket.broadcast.emit('online', {username: socket.request.user.username})
 
         users.push({
             name: socket.username,
             id: socket.id
         });
+
+        Model.findOne({username: socket.username}, (err, user) => {
+            user.friends.forEach((friend) => {
+                for(let person of users) {
+                    if(friend.username === person.name) {
+                        socket.join(person.id);
+                        socket.to(person.id).emit('online', {username: socket.username});
+                    }
+                }
+            })
+        })
+
         socket.on('disconnect', ()=>{
             console.log("user gone", socket.id)
-            // users.splice(users.indexOf(users.filter((x) => {
-            //     return x.id == socket.id;
-            // })), 1)
-            // console.log(users);
-            // socket.emit('connected user disconnected', socket.username);
-        });
 
+            users.splice(users.indexOf(users.filter((x) => {
+                return x.id === socket.id;
+            })[0]), 1);
+
+        });
 
 
         var currentJoined
         socket.on('join', (data) => {
-
             for(let user of users) {
                 if(user.name == data.friend) {
                     // console.log(true, user)
                     socket.join(user.id);
                     currentJoined = user.id;
 
-                    // console.log(currentJoined)
-                    Model.findOne({username: socket.request.user.username}, (err, person) => {
-                        if(!person) console.log('no user')
-                        person.friends.forEach((friend) => {
-
-                            if(user.name === friend.username) {
-                                users.forEach((owner) => {
-                                    if(owner.name === socket.request.user.username) {
-                                        console.log(owner.name,' ', owner.id)
-                                        socket.to(owner.id).emit('get_messages', {messages: friend.messages})
-                                    }
-                                })
-                            }
-                        })
-                    })
-                    // io.to(user.id).emit('new_msg', {message: 'hello this is a private message we are in a chat room', username: socket.username})
+                    //add this tommorrow
+                    
+                    // Model.findOne({username: socket.username}, (err, user) => {
+                    //     user.friends.forEach((friend) => {
+                    //         if(friend.username === data.friend) {
+                    //             friend.messages.forEach((msg) => {
+                    //                 if(msg.type === 'received' && msg.new) {
+                    //                     msg.new = false;
+                    //                 }
+                    //             })
+                    //         }
+                    //     })
+                    // })
                 }
             }
         })
@@ -72,7 +81,24 @@ module.exports = function(io, Model) {
                 })
                 user.save((err, update) => {
                     if(err) console.log(err);
-                    socket.to(currentJoined).emit('new_msg', {message: data.message, username: socket.username});
+                    console.log('currentJoined: ', currentJoined);
+                    if(currentJoined) {
+                        socket.to(currentJoined).emit('new_msg', {message: data.message, username: socket.username});
+                    } else {
+                        Model.findOne({username: data.toUser}, (err, user) => {
+                            user.friends.forEach((friend) => {
+                                if(friend.username === socket.username) {
+                                    friend.messages.push({
+                                        content: data.message,
+                                        type: 'received'
+                                    })
+                                }
+                            })
+                            user.save((err, data) => {
+                                if(err) console.log(err);
+                            })
+                        })
+                    }
                 });
             })
         })
@@ -100,6 +126,7 @@ module.exports = function(io, Model) {
             users.forEach((user) => {
                 if(user.name === data.username) {
                     socket.join(user.id)
+                    console.log(user.id, ' -> ', socket.id)
                 }
             })
         })

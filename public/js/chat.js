@@ -41,22 +41,23 @@ $(function() {
     })
     socket.on('online', function(friend) {
         let friends = document.querySelectorAll('.friend_obj');
+        let msgPanel = document.querySelector('.panel');
         console.log('emitted')
         console.log(friend.username);
         friends.forEach((x) => {
-            console.log(x)
-            console.log(x.dataset.username, ' ', friend.username);
             if(x.dataset.username == friend.username) {
                 x.dataset.status = 'online'
-                var msgPanel = document.querySelector('.panel');
-
-                if(msgPanel && msgPanel.dataset.username == x.dataset.username) {
-                    console.log(x.dataset.username, ' ', msgPanel.dataset.username)
-                    console.log(x.dataset.status)
-                    $('.activity_status').html(x.dataset.status);
-                }
             }
         })
+
+        var t = document.cookie;
+        if(friend.username === t.substring(t.indexOf('=')+1)) {
+            socket.emit('join', {friend: friend.username});
+        }
+        if(msgPanel && msgPanel.dataset.username === friend.username) {
+            console.log('is true...')
+            $('.activity_status').html('online');
+        }
     })
     $('.joe').click(function(e) {
         e.preventDefault();
@@ -68,8 +69,9 @@ $(function() {
         let fullName = this.dataset.fullname,
             username = this.dataset.username,
             status = this.dataset.status;
+            console.log('status: ', status)
         console.log('its here')
-
+        document.cookie = `current_joined=${username}`
         customAjax(`/messages?username=${username}`, 'GET', null, function(res) {
             var messages = JSON.parse(res);
             console.log(messages)
@@ -107,7 +109,7 @@ $(function() {
             })
             submitCall();
         })
-
+    
     })
     socket.on('typing', function(data) {
         $('.t_p').html(`${data.username} is typing...`)
@@ -125,9 +127,7 @@ $(function() {
         
     // })
 
-    socket.on('reconnect', function(attempNumber) {
-        socket.emit('suscribe', {username: $('.panel').data('username')})
-    })
+
 
     function submitCall() {
         $('.submit').click(function(e) {

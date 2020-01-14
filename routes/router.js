@@ -46,17 +46,14 @@ module.exports = function(app, Model) {
     }
 
     app.get('/', ensureAuthenticated, (req, res) => {
-        console.log('user: ',req.user)
 
         res.render('index', {friends: req.user.friends.filter((friend) => {
             return friend.friends_status === true;
         })});
-        console.log(req.session)
         // var io = require('../socket')();
     })
 
     app.get('/search/:name', (req, res) => {
-        console.log(req.params.name);
         var username = req.params.name;
 
         Model.find({username: username}).select({password: 0, _id: 0, __v: 0, friends: 0}).exec((err, data) => {
@@ -77,7 +74,6 @@ module.exports = function(app, Model) {
                 friends_status: false,
                 messages: []
             })
-            console.log(req.user)
             user.save((err, data) => {
                 if(err) console.log(err);
                 return data;

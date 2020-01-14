@@ -51,7 +51,7 @@ const mongoose = require('mongoose');
 
 const routes = require('./routes/router');
 const auth = require('./auth');
-const socket = require('./socket')
+const socket = require('./socket');
 const User = require('./model/User');
 
 
