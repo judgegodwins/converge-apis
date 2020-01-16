@@ -20,16 +20,16 @@ module.exports = function(io, Model) {
             id: socket.id
         });
 
-        // Model.findOne({username: socket.username}, (err, user) => {
-        //     user.friends.forEach((friend) => {
-        //         for(let person of users) {
-        //             if(friend.username === person.name) {
-        //                 socket.join(person.id);
-        //                 socket.to(person.id).emit('online', {username: socket.username});
-        //             }
-        //         }
-        //     })
-        // })
+        Model.findOne({username: socket.username}, (err, user) => {
+            user.friends.forEach((friend) => {
+                for(let person of users) {
+                    if(friend.username === person.name) {
+                        socket.join(person.id);
+                        socket.to(person.id).emit('online', {username: socket.username});
+                    }
+                }
+            })
+        })
 
         socket.on('disconnect', ()=>{
             console.log("user gone", socket.id)
@@ -38,7 +38,7 @@ module.exports = function(io, Model) {
                 return x.id === socket.id;
             })[0]), 1);
 
-            
+
         });
 
 
