@@ -8,7 +8,7 @@ $(function() {
         console.log('clicked')
         customAjax(`/search/${$('#search').val()}`, 'GET', null, function(res) {
             var people = JSON.parse(res);
-            for(item of people) {
+            for(let item of people) {
                 $('.results').html('');
                 $('.results').append(`<div class="item">
                 <h3 class="name"> ${item.first_name + ' ' +item.last_name}</h3>

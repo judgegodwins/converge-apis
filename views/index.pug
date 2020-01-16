@@ -11,6 +11,8 @@ html
         form
           input(type="text" id="search")
           button.search_friend(type="submit") Search
+          br
+          button.notify Enable notifications
         h1 Friends
         ul.friends_list
            each friend in friends
@@ -29,5 +31,5 @@ html
     script(src="/js/chat.js" type="module")
     script(src="/js/search.js" type="module")
     script(src="/js/ui.js")
-
+    script(src="/js/notifications.js" type="module")
 
