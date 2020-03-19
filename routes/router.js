@@ -49,7 +49,10 @@ module.exports = function(app, Model) {
 
         res.render('index', {friends: req.user.friends.filter((friend) => {
             return friend.friends_status === true;
+
         })});
+
+        console.log(req.user.friends)
         // var io = require('../socket')();
     })
 
@@ -122,15 +125,28 @@ module.exports = function(app, Model) {
     app
     .route('/messages')
     .get(ensureAuthenticated, (req, res) => {
-        const username = req.query.username;
+        let username = req.query.username;
 
         Model.findById(req.user._id, (err, user) => {
-            user.friends.forEach((friend) => {
-                if(username === friend.username) {
-                    const messages = friend.messages;
-                    res.send(messages);
-                }
-            });
+            if(username = '*') {
+                let allMessages = {
+
+                };
+                user.friends.forEach((friend) => {
+                    allMessages[friend.username] = friend.messages
+                })
+
+                res.send(allMessages)
+
+            } else {
+                user.friends.forEach((friend) => {
+                    if(username === friend.username) {
+                        const messages = friend.messages;
+                        res.send(messages);
+                    }
+                });
+            }
+
         })
     })
 

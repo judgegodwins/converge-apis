@@ -13,7 +13,7 @@ module.exports = function(io, Model) {
         // socket.id = socket.request.user.id;
         socket.status = 'online';
  
-        // socket.broadcast.emit('online', {username: socket.request.user.username})
+        socket.broadcast.emit('online', {username: socket.request.user.username})
 
         users.push({
             name: socket.username,
@@ -48,6 +48,8 @@ module.exports = function(io, Model) {
                 if(user.name == data.friend) {
                     // console.log(true, user)
                     socket.join(user.id);
+                    console.log('user_id: ', user.id);
+                    console.log('joining: ', user.name)
                     currentJoined = user.id;
 
                     //add this tommorrow
@@ -83,45 +85,43 @@ module.exports = function(io, Model) {
                 user.save((err, update) => {
                     if(err) console.log(err);
                     console.log('currentJoined: ', currentJoined);
-                    if(currentJoined) {
-                        socket.to(currentJoined).emit('new_msg', {message: data.message, username: socket.username});
-                    } else {
-                        Model.findOne({username: data.toUser}, (err, user) => {
-                            user.friends.forEach((friend) => {
-                                if(friend.username === socket.username) {
-                                    friend.messages.push({
-                                        content: data.message,
-                                        type: 'received'
-                                    })
-                                }
-                            })
-                            user.save((err, data) => {
-                                if(err) console.log(err);
-                            })
+                    socket.to(currentJoined).emit('new_msg', {message: data.message, username: socket.username});
+                    console.log('toUser: ', data.toUser);
+                    Model.findOne({username: data.toUser}, (err, user) => {
+                        user.friends.forEach((friend) => {
+                            if(friend.username === socket.username) {
+                                friend.messages.push({
+                                    content: data.message,
+                                    type: 'received'
+                                })
+                            }
                         })
-                    }
+                        user.save((err, data) => {
+                            if(err) console.log(err);
+                        })
+                    })
                 });
             })
         })
 
-        socket.on('save_message', (data) => {
-            Model.findOne({username: socket.request.user.username}, (err, user) => {
-                user.friends.forEach((friend) => {
-                    if(friend.username === data.username) {
+        // socket.on('save_message', (data) => {
+        //     Model.findOne({username: socket.request.user.username}, (err, user) => {
+        //         user.friends.forEach((friend) => {
+        //             if(friend.username === data.username) {
                         
-                        friend.messages.push({
-                            content: data.message,
-                            type: 'received'
-                        });
+        //                 friend.messages.push({
+        //                     content: data.message,
+        //                     type: 'received'
+        //                 });
 
-                    }
-                })
+        //             }
+        //         })
 
-                user.save((err, data) => {
-                    if(err) console.log(err);
-                });
-            })
-        })
+        //         user.save((err, data) => {
+        //             if(err) console.log(err);
+        //         });
+        //     })
+        // })
         socket.on('suscribe', (data) => {
             console.log(data.username, ' ', 'trying to reconnect')
             users.forEach((user) => {

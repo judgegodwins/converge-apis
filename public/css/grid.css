@@ -1,0 +1,365 @@
+* {
+    box-sizing: border-box;
+}
+
+
+body {
+    padding: 0;
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+}
+.container {
+
+    display: grid;
+    width: 100%;
+    height: 100vh;
+    grid-template-columns: 1fr 3fr;
+    grid-template-rows: 100%;
+    grid-template-areas: "message-area main-area";
+}
+
+.messages-area {
+    background: #fff;
+    grid-area: message-area;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 120px 6fr;
+    transition: all 1s;
+}
+
+.main-area {
+    grid-area: main-area;
+    display: grid;
+    grid-template-columns: 100%;
+    grid-template-rows: .265fr 3fr .35fr;
+    grid-template-areas: 
+        "chat-header"
+        "chat-area"
+        "chat-form"  
+    ;
+}
+
+.messages-div {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(auto-fill, minmax(80px, 1fr));
+    overflow-y: scroll;
+}
+
+.messages-div::-webkit-scrollbar {
+    width: 3px;
+}
+
+
+.messages-div::-webkit-scrollbar-thumb {
+    background: #eee;
+}
+
+.messages-div::-webkit-scrollbar-thumb:hover {
+    background: rgb(152, 153, 153);
+}
+
+.messages-div::-webkit-scrollbar:hover .messages-div::-webkit-scrollbar-thumb {
+    background: rgb(152, 153, 153);
+}
+
+.messages-div::-webkit-scrollbar-track {
+    background: #eee;
+}
+
+.message {
+    display: grid;
+    grid-template-columns: auto 3fr;
+    grid-template-rows: 1fr;
+    padding: 10px 10px;
+    cursor: pointer;
+}
+
+.message:hover,
+.message:active {
+    background: #eee;
+}
+
+
+
+ .image-div {
+    padding: 0 10px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.friend-avatar {
+    height: 50px;
+    width: 50px;
+    border-radius: 50px;
+}
+
+.message .msg-text-name {
+    color: #000;
+    display: grid;
+}
+
+.msg-text-name .msg-content {
+    padding: 0 3px;
+}
+
+.msg-text-name .friend-name{
+    padding: 3px 3px 0;
+}
+
+.msg-content .msg-span {
+    font-size: 12px;
+}
+
+.chat-header {
+    background: #e5e5e5;
+    grid-area: chat-header;
+    display: grid;
+    grid-template-columns: auto 3fr auto;
+    grid-template-rows: 100%;
+    padding: 10px 16px;
+    height: 60px;
+}
+
+.header-img {
+    height: 40px;
+    width: 40px;
+}
+
+
+.chat-area {
+    background: #fff;
+    grid-area: chat-area;
+    display: flex;
+    flex-direction: column-reverse;
+    padding: 0 20px;
+    overflow-y: scroll;
+}
+
+.message-row {
+    margin-bottom: 20px;
+    display: grid;
+    grid-template-columns: 70%;
+}
+
+.you-message {
+    justify-content: end;
+    justify-items: end;
+}
+
+.other-message {
+    justify-content: start;
+    justify-items: start;
+}
+
+.message-text {
+    padding: 9px 14px;
+    font-size: 1rem;
+    margin-bottom: 5px;
+}
+
+.you-message .message-text {
+    background: #0048aa;
+    color: #eee;
+    border: 1px solid #0048aa;
+    border-radius: 14px 14px 0 14px;
+}
+
+.other-message .message-text {
+    background: #eee;
+    color: #111;
+    border: 1px solid #ddd;
+    border-radius: 14px 14px 14px 0;
+}
+
+.message-time {
+    font-size: .8rem;
+    color: #777;
+}
+
+.messages {
+    background: rgb(5, 33, 71);
+}
+
+.top {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 1fr;
+    color: white;
+    border-right: 3px solid #eee;
+}
+
+.actions {
+    background: #e5e5e5;
+}
+
+.search-container {
+    grid-column: 1 / 3;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.search {
+    width: 90%;
+    border: none;
+    outline: none;
+    color: #111;
+    height: 30px;
+    padding: 0 10px;
+    background: #eee;
+}
+
+.top .logo {
+    padding: 0 20px;
+}
+
+.top .profile-img-div {
+    padding: 0 20px;
+}
+
+.friend-header-img-div {
+    width: 55px;
+    height: 100%;
+}
+
+.friend-header-img-div .img-container {
+    width: 100%;
+    height: 100%;
+}
+
+.main-header {
+    display: grid;
+}
+
+/* .main-header .name {
+    padding-top: 5px;
+} */
+
+.main-header .lastseen {
+    font-size: 14px;
+    color: #777;
+    padding-top: 5px;
+}
+.header-actions {
+    display: grid;
+    grid-template-rows: 100%;
+    grid-template-columns: auto auto auto;
+    width: 120px;
+}
+
+.action {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    color: #777;
+    border-radius: 50%;
+    width: 40px;
+}
+
+.action:active {
+    background: #d3d0d0;
+}
+
+.chat-form {
+    background: #e5e5e5;
+    grid-area: chat-form ;
+    display: grid !important;
+    grid-template-columns: auto 1fr auto;
+    padding: 10px 20px;
+}
+
+.form-action {
+    width: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    color: #777;    
+}
+
+.form-action:active {
+    transform: scale(.9);
+}
+
+.emoji-div {
+
+}
+
+.form-icon {
+    font-size: 35px;
+}
+
+.msg-input {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.msg-input #message-box {
+    width: 95%;
+    display: grid;
+    height: 40px;
+    border: 1px solid #fff;
+    border-radius: 17px;
+    outline: none;
+    padding-left: 20px;
+    font-size: 17px;
+}
+
+.send-div {
+
+}
+
+.back {
+    display: none;
+}
+
+@media only screen and (max-width: 768px) {
+    .container {
+        grid-template-columns: 100%;
+        position: fixed !important;
+        grid-template-areas: "active-area";
+        height: 100% !important;
+    }
+    
+    .chat-header {
+        background-color: #4f66ba;
+        color: #fff;
+    }
+
+    .chat-header i, .chat-header span {
+        color: #fff
+    }
+
+    .actions {
+        background: #4f66ba;
+    }
+
+    .send-div, .send-div:active {
+        color: #4f66ba;
+        background: none;
+        outline: none;
+        justify-content: flex-end;
+    }
+
+    .active-area {
+        grid-area: active-area;    
+    }
+
+    .chat-header {
+        grid-template-columns: auto auto 3fr auto;
+    }
+
+    .back {
+        display: inline-flex;
+        justify-content: start;
+        align-items: center;
+        width: 40px;
+        border-radius: 50%;
+    }
+
+    .back:active {
+        background: #d3d0d0;
+    }
+
+}
