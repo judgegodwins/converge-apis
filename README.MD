@@ -1,17 +1,17 @@
 # Converge
 ## Chat application using websockets
-Currently in developement
+Currently in developement.
 
 ## To contribute 
-Clone the repo 
+Clone the repo.
 
 ```bash
 git clone https://github.com/Judgegodwins/converge-apis.git
 ```
 
-Note: You need to have mongoDB running either on your local machine or in the cloud(mongoDB Atlas)
+Note: You need to have mongoDB running either on your local machine or in the cloud(mongoDB Atlas).
 
-Create a .env file for connection strings and secrets
+Create a .env file for connection strings and secrets.
 
 ```.env
 DB=yourconnectionstring
@@ -25,5 +25,10 @@ Install all dependencies using
 ```bash
 npm install
 ```
+Run 
 
+```bash
+   npm start
+```
 
+to launch the server locally.
