@@ -28,7 +28,7 @@ npm install
 Run 
 
 ```bash
-   npm start
+npm start
 ```
 
 to launch the server locally.
