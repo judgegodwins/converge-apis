@@ -34,3 +34,18 @@ export function friendClick() {
     })
 } 
 
+var more = document.getElementById("more"), 
+    dropdown = document.getElementById("dropdown");
+
+var showDropDown = function(e){
+        dropdown.classList.add("show");
+};
+var hideDropDown = function(e){
+    if(e.target !== more){
+        // console.log(e.target);
+        dropdown.classList.remove("show");
+    }    
+}
+
+more.addEventListener("click", showDropDown);
+window.addEventListener("click", hideDropDown);             
