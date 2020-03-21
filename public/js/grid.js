@@ -35,10 +35,12 @@ export function friendClick() {
 } 
 
 var more = document.getElementById("more"), 
-    dropdown = document.getElementById("dropdown");
+    dropdown = document.getElementById("dropdown"),
+    moreIcon = document.getElementById('more-icon');
 
 var showDropDown = function(e){
         dropdown.classList.add("show");
+        console.log('trying dropdown')
 };
 var hideDropDown = function(e){
     if(e.target !== more){
@@ -47,5 +49,6 @@ var hideDropDown = function(e){
     }    
 }
 
+more.addEventListener("click", showDropDown);
 more.addEventListener("click", showDropDown);
 window.addEventListener("click", hideDropDown);             
