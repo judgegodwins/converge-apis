@@ -51,7 +51,7 @@ const mongoose = require('mongoose');
 
 const routes = require('./routes/router');
 const auth = require('./auth');
-const socket = require('./socket');
+const socket = require('./socket').socketConnection;
 const User = require('./model/User');
 
 
@@ -60,7 +60,6 @@ mongoose.connect(process.env.DB, {useNewUrlParser: true}, (err, db) => {
     auth(app, User)
     routes(app, User);
     socket(io, User);
-
     server.listen(PORT, ()=> console.log(`Server started on port ${PORT}`));
 })
 

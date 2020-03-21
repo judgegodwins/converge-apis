@@ -1,0 +1,5 @@
+User can only send messages to someone not his friend
+
+get user status just by checking users array -> done
+
+write areFriends(); -> done

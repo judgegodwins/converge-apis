@@ -29,7 +29,7 @@ var friendSchema = new Schema({
         required: true
     },
     friends_status: Boolean,
-
+    lastSeen: Date,
     messages: [MessageSchema]
 })
 
@@ -59,6 +59,7 @@ var userSchema = new Schema({
         required: true,
         enum: ['male', 'female']
     },
+    lastSeen: Date,
     friends: [friendSchema],
 })
 

@@ -22,8 +22,12 @@ body {
     background: #fff;
     grid-area: message-area;
     display: grid;
+    grid-template-areas: 
+        'top'
+        'activity-area'
+    ;
     grid-template-columns: 1fr;
-    grid-template-rows: 120px 6fr;
+    grid-template-rows: 120px 6fr !important;
     transition: all 1s;
 }
 
@@ -39,11 +43,20 @@ body {
     ;
 }
 
-.messages-div {
+.messages-div, .search-div {
     display: grid;
     grid-template-columns: 1fr;
     grid-template-rows: repeat(auto-fill, minmax(80px, 1fr));
     overflow-y: scroll;
+}
+
+.inactive-left {
+    display: none;
+}
+
+.active-left {
+    display: grid;
+    grid-area: activity-area;
 }
 
 .messages-div::-webkit-scrollbar {
@@ -183,6 +196,7 @@ body {
 
 .top {
     display: grid;
+    grid-area: top;
     grid-template-columns: 1fr;
     grid-template-rows: 1fr 1fr;
     color: white;
@@ -200,7 +214,7 @@ body {
     align-items: center;
 }
 .search {
-    width: 90%;
+    width: 80%;
     border: none;
     outline: none;
     color: #111;

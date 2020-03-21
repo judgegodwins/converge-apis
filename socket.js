@@ -1,6 +1,6 @@
 
 
-module.exports = function(io, Model) {
+function socketConnection(io, Model) {
 
     const users = []
 
@@ -10,30 +10,66 @@ module.exports = function(io, Model) {
 
         socket.username = socket.request.user.username;
 
+
         // socket.id = socket.request.user.id;
         socket.status = 'online';
- 
+
+
+        socket.broadcast.emit('connected', {
+            username: socket.username,
+            status: socket.status
+        });
+
+        socket.on('bring_status', (data, callback) => {
+            let person = users.find((x) => {
+                return x.name == data.username;
+            });
+            
+            if(!person) {
+
+                Model.findOne({username: data.username}).select({password: 0, id: 0}).exec((err, user) => {
+                    callback(user.lastSeen, true)
+                })
+
+            } else {
+                callback(person.status, false);
+            }
+
+        })
+
+        
         socket.broadcast.emit('online', {username: socket.request.user.username})
 
         users.push({
             name: socket.username,
-            id: socket.id
+            id: socket.id,
+            status: socket.status
         });
 
-        Model.findOne({username: socket.username}, (err, user) => {
-            user.friends.forEach((friend) => {
-                for(let person of users) {
-                    if(friend.username === person.name) {
-                        socket.join(person.id);
-                        socket.to(person.id).emit('online', {username: socket.username});
-                    }
-                }
-            })
-        })
+        // Model.findOne({username: socket.username}, (err, user) => {
+        //     user.friends.forEach((friend) => {
+        //         for(let person of users) {
+        //             if(friend.username === person.name) {
+        //                 socket.join(person.id);
+        //                 socket.to(person.id).emit('online', {username: socket.username});
+        //             }
+        //         }
+        //     })
+        // })
 
         socket.on('disconnect', ()=>{
             console.log("user gone", socket.id)
+            
+            socket.broadcast.emit('disconnected', {username: socket.request.user.username, time: new Date()})
 
+            Model.findOne({username: socket.request.user.username}, (err, user) => {
+                user.lastSeen = new Date();
+                user.save((err, data) => {
+                    if(err) console.log(err);
+                })
+            })
+
+            console.log('socket.req.user: ', socket.request.user);
             users.splice(users.indexOf(users.filter((x) => {
                 return x.id === socket.id;
             })[0]), 1);
@@ -48,9 +84,11 @@ module.exports = function(io, Model) {
                 if(user.name == data.friend) {
                     // console.log(true, user)
                     socket.join(user.id);
+
                     console.log('user_id: ', user.id);
                     console.log('joining: ', user.name)
                     currentJoined = user.id;
+                    
 
                     //add this tommorrow
                     
@@ -68,6 +106,8 @@ module.exports = function(io, Model) {
                 }
             }
         })
+
+
         // io.to(socket.id).emit('handle', handle)
         socket.on('new_message', (data) => {
             console.log(currentJoined)
@@ -182,27 +222,38 @@ module.exports = function(io, Model) {
     /* Defining functions
     * for reuse
     */
-    let count = 0
-    function areFriends(user1, user2) {
-        Model.findOne({username: user1}, (err, user) => {
-            user.friends.forEach((friend) => {
-                if(friend.username == user2) {
-                    if(friend.friends_status === true) {
-                        count += 1;
-                        if(count == 2) {
 
-                            return true
-                        } else {
-                            return areFriends(user2, user1);
-                        }
-                    } else {
-                        return false
-                    }
-                }
-            })
+    
+}
+
+function areFriends(user1, user2, Model) {
+    let truthOne, truthTwo
+
+    let check = (user, otherUser, truth) => {
+
+        user.friends.forEach((friend) => {
+            if(friend.username == otherUser && friend.friend_status == true) {
+                truth = true
+            } else {
+                truth = false;
+            }
         })
     }
 
-    
+    Model.findOne({username: user1}, (err, user) => {
+        if(err) console.log(err);
 
+        check(user, user2, truthOne);
+
+        Model.findOne({username: user2}, (err, user) => {
+            check(user, user1, truthTwo);
+        })
+    })
+    if(truthOne == truthTwo) return true;
+    else return false;
+}
+
+module.exports = {
+    socketConnection: socketConnection,
+    areFriends: areFriends
 }
