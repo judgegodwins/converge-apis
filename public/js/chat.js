@@ -83,9 +83,13 @@ $(function() {
 
             socket.emit('new_message', {message: msg, toUser: friend});
 
-            var msgInd = friendMessages[friend].messages;
-            msgInd.push({content: msg, type: 'sent'})
-            $('.msg-span').html(msgInd[msgInd.length-1].content)
+            try {
+                var msgInd = friendMessages[friend].messages;
+                msgInd.push({content: msg, type: 'sent'})
+                $('.msg-span').html(msgInd[msgInd.length-1].content)
+            } catch (err) {
+
+            }
 
 
             chatArea.innerHTML = newMessage(msg, 'you-message', null) + chatArea.innerHTML;
@@ -195,7 +199,7 @@ $(function() {
         $('.search-div').addClass('active-left');
         $('.search-div').removeClass('inactive-left');
 
-        fetch(`/search/${this.value}`)
+        fetch(`/search/${this.value.toLowerCase()}`)
             .then(res => res.json())
             .then(data => {
                 $('.search-div').html('');

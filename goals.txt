@@ -3,3 +3,7 @@ User can only send messages to someone not his friend
 get user status just by checking users array -> done
 
 write areFriends(); -> done
+
+if first time users send message to each other,
+create a friend object for both users in user.friends
+emit status and messages to both users to store in 
