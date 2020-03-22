@@ -112,35 +112,104 @@ function socketConnection(io, Model) {
         socket.on('new_message', (data) => {
             console.log(currentJoined)
             console.log('received new message: ', data.message)
-             Model.findOne({username: socket.request.user.username}, (err, user) => {
-                user.friends.forEach((friend) => {
-                    if(friend.username === data.toUser) {
-                        friend.messages.push({
+            Model.findOne({username: socket.request.user.username}).select({password: 0}).exec((err, sender) => {
+                Model.findOne({username: data.toUser}).select({password: 0}).exec((err, receiver) => {
+
+                    let movingFriend = indexOfFriend(sender, receiver.username);
+
+                    function indexOfFriend(owner, findee) {
+                        return owner.friends.filter((x) => {
+                            return x.username === findee;
+                        })[0];
+                    }
+                    
+                    if(movingFriend) {
+                        sender.friends[sender.friends.indexOf(indexOfFriend(sender, receiver.username))].messages.push({
                             content: data.message,
-                            type: 'sent'
+                            type: 'sent',
+                            time: new Date()
                         })
 
-                    }
-                })
-                user.save((err, update) => {
-                    if(err) console.log(err);
-                    console.log('currentJoined: ', currentJoined);
-                    socket.to(currentJoined).emit('new_msg', {message: data.message, username: socket.username});
-                    console.log('toUser: ', data.toUser);
-                    Model.findOne({username: data.toUser}, (err, user) => {
-                        user.friends.forEach((friend) => {
-                            if(friend.username === socket.username) {
-                                friend.messages.push({
-                                    content: data.message,
-                                    type: 'received'
-                                })
-                            }
+                        console.log('sender username: ', sender.username);
+                        console.log('receiver friend: ', receiver.friends[receiver.friends.indexOf(indexOfFriend(receiver, sender.username))]);
+                        receiver.friends[receiver.friends.indexOf(indexOfFriend(receiver, sender.username))].messages.push({
+                            content: data.message,
+                            type: 'received',
+                            time: new Date()
                         })
-                        user.save((err, data) => {
-                            if(err) console.log(err);
+                    } else {
+                        console.log('not yet in friend list, adding to friendlist');
+                        sender.friends.push({
+                            username: receiver.username,
+                            first_name: receiver.first_name,
+                            last_name: receiver.last_name,
+                            friends_status: false,
+                            messages: [{
+                                content: data.message,
+                                type: 'sent',
+                                time: new Date()
+                            }]
+                        })
+
+                        receiver.friends.push({
+                            username: sender.username,
+                            first_name: sender.first_name,
+                            last_name: sender.last_name,
+                            friends_status: false,
+                            messages: [{
+                                content: data.message,
+                                type: 'received',
+                                time: new Date()
+                            }]
+                        })
+
+                        console.log('sender: ', sender)
+                        console.log('users array: ', users)
+                        let user1 = users.filter((x) => {
+                            return x.name == sender.username;
+                        })[0].id,
+                            user2;
+                        try {
+                            user2= users.filter((x) => {
+                                return x.name == receiver.username;
+                            })[0].id;
+                        } catch(err) {
+
+                        }
+                        
+                        console.log('user1: ', user1);
+
+                        console.log('user2: ', user2)
+                        function emitNewMsg(user, userSocket, otherUser) {
+                            let userIndex = user.friends.find((x) => {
+                                return x.username === otherUser.username;
+                            });
+                            console.log('userIndex: ', userIndex);
+                            socket.join(userSocket);
+                            socket.to(userSocket).emit('add_new_messages', {
+                                username: otherUser.username,
+                                messages: user.friends[user.friends.indexOf(userIndex)].messages
+                            })
+                        }
+
+                        emitNewMsg(sender, user1, receiver);
+                        emitNewMsg(receiver, user2, sender);
+
+
+                    }
+
+
+
+                    sender.save((err, d1) => {
+                        if(err) console.log(err);
+                        receiver.save((err, d1) => {
+                            if(err) console.log(err)
+                            socket.to(currentJoined).emit('new_msg', {username: socket.username, message: data.message})
                         })
                     })
-                });
+
+                })
+
             })
         })
 

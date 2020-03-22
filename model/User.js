@@ -12,7 +12,8 @@ const MessageSchema = new Schema({
         type: String,
         required: true,
         enum: ['sent', 'received']
-    }
+    },
+    time: Date
 })
 
 var friendSchema = new Schema({

@@ -34,20 +34,40 @@ $(function() {
     }
     
     
+    function newPerson(person) {
+        return `
+             <div class="message" data-img="/src/img/download.png" data-username="${person.username}">
+                 <div class="image-div">
+                     <img class="friend-avatar" src="/src/img/download.png" alt="image of friend" srcset="" />
+                 </div>
+                 <div class="msg-text-name">
+                     <div class="friend-name">
+                         <span id="username">${person.fullname ? person.fullname : person.first_name + ' ' + person.last_name}</span>
+                     </div>
+                     <div class="msg-content">
+                         <span class="msg-span">${friendMessages[person.username] ? friendMessages[person.username].messages[friendMessages[person.username].messages.length-1].content : '@' + person.username}</span>
+                     </div>
+                 </div>
+             </div>
+         `
+     }
+
+
     fetch('/messages?username=*')
         .then(res => {return res.json()})
         .then((data) =>{
             console.log('data: ', data)
-            console.log(friendMessages)
+            console.log('bring friendMessages: ', friendMessages)
             var obj = Object.keys(data);
+            friendMessages = data;
             obj.forEach((key, i) => {
-                friendMessages[key] = {
-                    activeStatus: null,
-                    messages: (Object.values(data))[i]
-                }
+                console.log('key: ', key);
+                friendMessages[key].activeStatus = null
+                $('.messages-div').append(newPerson(friendMessages[key]));
             })
-            console.log(friendMessages)
-
+            friendClick();
+            console.log('friendmessages from fetch: ', friendMessages)
+            $('.message').click(messageClick)
         });
     friendClick();
 
@@ -81,7 +101,11 @@ $(function() {
 
             if(msg == '') return;
 
-            socket.emit('new_message', {message: msg, toUser: friend});
+            socket.emit('new_message', {message: msg, toUser: friend, fullName: $('#header-username').html()});
+            
+            socket.on('add_new_messages', (data) => {
+                console.log('add_new_messages data: ', data);
+            })
 
             try {
                 var msgInd = friendMessages[friend].messages;
@@ -91,6 +115,7 @@ $(function() {
 
             }
 
+            console.log(friendMessages);
 
             chatArea.innerHTML = newMessage(msg, 'you-message', null) + chatArea.innerHTML;
             $('#message-box').val('');
@@ -113,8 +138,16 @@ $(function() {
 
     })
 
+
+    socket.on('add_new_messages', (data) => {
+        console.log('add_new_messages data: ', data);
+    })
+
+
+
     function messageClick(e) {
-        let friendUsername = this.dataset.username
+        console.log('calling message click');
+        let friendUsername = this.dataset.username;
         socket.emit('join', {friend: friendUsername});
         submitCall(this.dataset.username);
         chatArea.innerHTML = '';
@@ -125,15 +158,26 @@ $(function() {
 
         document.cookie = `current_joined=${this.dataset.username}`
 
-        try {
-            $('#lastseen').html(friendMessages[friendUsername].activeStatus);
-        } catch (err) {
+        if(friendMessages[friendUsername].activeStatus) {
+
+                $('#lastseen').html(friendMessages[friendUsername].activeStatus);
+        } else {
             console.log(this.dataset.username)
             socket.emit('bring_status', {username: this.dataset.username}, (status, fromDb) => {
-
+                console.log('bringing status')
                 console.log('status: ', status)
-                status != 'online' ? $('#lastseen').html(`last seen ${parseDate(status)}`) : $('#lastseen').html(status) 
-                
+                if(status != 'online') {
+                    let lastSeen = `last seen ${parseDate(status)}`
+                    $('#lastseen').html(lastSeen);
+                    try {
+                        friendMessages[this.dataset.username].activeStatus = lastSeen;
+                        console.log('lastSeen FriendMessages: ', friendMessages)
+                    } catch(err) {
+                        return;
+                    }
+                } else {
+                    $('#lastseen').html(status) 
+                }
             });
         }
 
@@ -154,8 +198,8 @@ $(function() {
         }
 
     }
-
     $('.message').click(messageClick);
+
 
     socket.on('online', (friend) => {
         var t = document.cookie;
@@ -199,7 +243,14 @@ $(function() {
         $('.search-div').addClass('active-left');
         $('.search-div').removeClass('inactive-left');
 
-        fetch(`/search/${this.value.toLowerCase()}`)
+        var url = new URL(`${window.location.origin}/search`),
+            params = {username: this.value.toLowerCase()}
+        
+        Object.keys(params).forEach(key => {
+            url.searchParams.append(key, params[key])
+        })
+        
+        fetch(url)
             .then(res => res.json())
             .then(data => {
                 $('.search-div').html('');
@@ -209,22 +260,9 @@ $(function() {
                 })
                 console.log('good data: ', goodData)
                 goodData.forEach((person) => {
-                    $('.search-div').append(`
-                        <div class="message" data-img="/src/img/download.png" data-username="${person.username}">
-                            <div class="image-div">
-                                <img class="friend-avatar" src="/src/img/download.png" alt="image of friend" srcset="" />
-                            </div>
-                            <div class="msg-text-name">
-                                <div class="friend-name">
-                                    <span id="username">${person.first_name + ' ' + person.last_name}</span>
-                                </div>
-                                <div class="msg-content">
-                                    <span class="msg-span">${friendMessages[person.username] ? friendMessages[person.username].messages[friendMessages[person.username].messages.length-1].content : '@' + person.username}</span>
-                                </div>
-                            </div>
-                        </div>
-                    `)
+                    $('.search-div').append(newPerson(person))
                 })
+
                 friendClick();
                 $('.message').click(messageClick);
             })

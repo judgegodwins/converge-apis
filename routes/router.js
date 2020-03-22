@@ -57,8 +57,10 @@ module.exports = function(app, Model) {
         // var io = require('../socket')();
     })
 
-    app.get('/search/:name', (req, res) => {
-        var username = req.params.name;
+    app.get('/search', (req, res) => {
+        var username = req.query.username;
+
+        console.log(username);
 
         let results = [] 
 
@@ -96,9 +98,9 @@ module.exports = function(app, Model) {
             })
             user.save((err, data) => {
                 if(err) console.log(err);
-                return data;
+                return data;                                                                                                                                                                                                                                                                    
             })
-        }
+        }                                                                                   
         const sentTo = await Model.findOne({username: username}, fixRequest);
 
         await Model.findById(req.user._id, (err, user) => {
@@ -149,8 +151,13 @@ module.exports = function(app, Model) {
                 let allMessages = {
 
                 };
+
                 user.friends.forEach((friend) => {
-                    allMessages[friend.username] = friend.messages
+                    allMessages[friend.username] = {
+                        fullname: friend.first_name + ' ' + friend.last_name,
+                        username: friend.username,
+                        messages: friend.messages
+                    }
                 })
 
                 res.send(allMessages)
