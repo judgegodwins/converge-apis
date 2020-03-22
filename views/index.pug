@@ -44,14 +44,6 @@ html
                     i.fas.fa-paperclip.header-icon
                   span#more.action
                     i.fas.fa-ellipsis-v.header-icon
-                  #dropdown
-                    ul
-                      li View Contact
-                      li Media, links, docs
-                      li Search
-                      li Mute
-                      li Wallpaper
-                      li More
               .chat-area
                 .message-row.you-message
                     .message-text Let&apos;s see now
@@ -74,6 +66,16 @@ html
                     input#message-box(name='' placeholder='Type a message')
                 .send-div.form-action.submit
                     i.fas.fa-paper-plane.form-icon
+        
+        #dropdown
+          ul
+            li View Contact
+            li Media, links, docs
+            li Search
+            li Mute
+            li Wallpaper
+            li More
+
         script(src="/socket.io/socket.io.js")
         script(src="/js/jquery-3.4.1.min.js")
         script(src='/js/grid.js' type="module")

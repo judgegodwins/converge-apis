@@ -35,17 +35,26 @@ export function friendClick() {
 } 
 
 var more = document.getElementById("more"), 
-    dropdown = document.getElementById("dropdown");
+    dropdown = document.getElementById("dropdown"),
+    container = document.querySelector(".container");
 
-var showDropDown = function(e){
-        dropdown.classList.add("show");
+var showDropDown = function(e, el){
+    el.classList.add("show");
+    var x = e.target.getBoundingClientRect().x,
+        y = e.target.getBoundingClientRect().y; 
+    el.style.top = y + "px";   
+    el.style.left = x + "px";   
 };
-var hideDropDown = function(e){
+var hideDropDown = function(e, el){
     if(e.target !== more){
         // console.log(e.target);
-        dropdown.classList.remove("show");
+        el.classList.remove("show");
     }    
 }
 
-more.addEventListener("click", showDropDown);
-window.addEventListener("click", hideDropDown);             
+more.addEventListener("click", function(e){
+    showDropDown(e, dropdown);
+});
+container.addEventListener("click", function(e){
+    hideDropDown(e, dropdown);
+});             
