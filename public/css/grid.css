@@ -22,8 +22,12 @@ body {
     background: #fff;
     grid-area: message-area;
     display: grid;
+    grid-template-areas: 
+        'top'
+        'activity-area'
+    ;
     grid-template-columns: 1fr;
-    grid-template-rows: 120px 6fr;
+    grid-template-rows: 120px 6fr !important;
     transition: all 1s;
 }
 
@@ -39,11 +43,20 @@ body {
     ;
 }
 
-.messages-div {
+.messages-div, .search-div {
     display: grid;
     grid-template-columns: 1fr;
     grid-template-rows: repeat(auto-fill, minmax(80px, 1fr));
     overflow-y: scroll;
+}
+
+.inactive-left {
+    display: none;
+}
+
+.active-left {
+    display: grid;
+    grid-area: activity-area;
 }
 
 .messages-div::-webkit-scrollbar {
@@ -117,7 +130,7 @@ body {
     display: grid;
     grid-template-columns: auto 3fr auto;
     grid-template-rows: 100%;
-    padding: 10px 16px;
+    padding: 10px 16px 10px 0;
     height: 60px;
 }
 
@@ -183,6 +196,7 @@ body {
 
 .top {
     display: grid;
+    grid-area: top;
     grid-template-columns: 1fr;
     grid-template-rows: 1fr 1fr;
     color: white;
@@ -200,7 +214,7 @@ body {
     align-items: center;
 }
 .search {
-    width: 90%;
+    width: 80%;
     border: none;
     outline: none;
     color: #111;
@@ -218,8 +232,10 @@ body {
 }
 
 .friend-header-img-div {
-    width: 55px;
+    width: 50px;
     height: 100%;
+    z-index: 3;
+    background: inherit;
 }
 
 .friend-header-img-div .img-container {
@@ -236,30 +252,38 @@ body {
 } */
 
 .main-header .lastseen {
-    font-size: 14px;
+    font-size: 13px;
     color: #777;
     padding-top: 5px;
 }
+
+#lastseen {
+    position: relative;
+    /* left: -50%; */
+    top: 0;
+    z-index: 1;
+}
+
 .header-actions {
     display: grid;
     grid-template-rows: 100%;
     grid-template-columns: auto auto auto;
-    width: 120px;
-    position: relative  ;
+    width: 100px;
+    position: relative;
 }
 
 .action {
     display: inline-flex;
-    justify-content: center;
+    justify-content: flex-end;
     align-items: center;
     color: #777;
     border-radius: 50%;
-    width: 40px;
+    width: 30px;
 }
 
-.action:active {
+/* .action:active {
     background: #d3d0d0;
-}
+} */
 
 /*Dropdown for menu*/
 #dropdown{
@@ -394,14 +418,13 @@ body {
 
     .back {
         display: inline-flex;
-        justify-content: start;
+        justify-content: center;
         align-items: center;
-        width: 40px;
-        border-radius: 50%;
+        width: 30px;
+        /* border-radius: 50%; */
+        z-index: 3;
+        background: inherit;
     }
 
-    .back:active {
-        background: #d3d0d0;
-    }
 
 }

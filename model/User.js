@@ -12,7 +12,8 @@ const MessageSchema = new Schema({
         type: String,
         required: true,
         enum: ['sent', 'received']
-    }
+    },
+    time: Date
 })
 
 var friendSchema = new Schema({
@@ -29,7 +30,7 @@ var friendSchema = new Schema({
         required: true
     },
     friends_status: Boolean,
-
+    lastSeen: Date,
     messages: [MessageSchema]
 })
 
@@ -59,6 +60,7 @@ var userSchema = new Schema({
         required: true,
         enum: ['male', 'female']
     },
+    lastSeen: Date,
     friends: [friendSchema],
 })
 

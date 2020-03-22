@@ -1,6 +1,6 @@
 const passport = require('passport');
 const bcrypt = require('bcryptjs');
-
+const areFriends = require('../socket').areFriends;
 module.exports = function(app, Model) {
     app.route('/login')
     .get((req, res) => {
@@ -25,7 +25,8 @@ module.exports = function(app, Model) {
                     first_name: req.body.firstname,
                     last_name: req.body.lastname,
                     gender: req.body.gender,
-                    password: bcrypt.hashSync(req.body.password, 12)
+                    password: bcrypt.hashSync(req.body.password, 12),
+                    lastSeen: new Date()
                 })
                 user.save((err, user) => {
                     if(err) return next(err);
@@ -50,18 +51,36 @@ module.exports = function(app, Model) {
         res.render('index', {friends: req.user.friends.filter((friend) => {
             return friend.friends_status === true;
 
-        })});
+        }), user: req.user.username});
 
         console.log(req.user.friends)
         // var io = require('../socket')();
     })
 
-    app.get('/search/:name', (req, res) => {
-        var username = req.params.name;
+    app.get('/search', (req, res) => {
+        var username = req.query.username;
 
-        Model.find({username: username}).select({password: 0, _id: 0, __v: 0, friends: 0}).exec((err, data) => {
+        console.log(username);
+
+        let results = [] 
+
+
+        Model.find({}).select({password: 0, _id: 0, __v: 0, friends: 0}).exec((err, data) => {
             if(err) console.log(err);
-            res.send(data);
+            data.forEach((person) => {
+                if(person.username.includes(username)) {
+
+                    if(results.indexOf(person) < 0) {
+                        results.push(person);
+
+                        results.forEach((x) => {
+                            x['arefriends'] = areFriends(x.username, req.user.username, Model);
+                        })
+                    }
+                }
+            })
+  
+            res.send(results);
         })
     });
 
@@ -79,9 +98,9 @@ module.exports = function(app, Model) {
             })
             user.save((err, data) => {
                 if(err) console.log(err);
-                return data;
+                return data;                                                                                                                                                                                                                                                                    
             })
-        }
+        }                                                                                   
         const sentTo = await Model.findOne({username: username}, fixRequest);
 
         await Model.findById(req.user._id, (err, user) => {
@@ -132,8 +151,13 @@ module.exports = function(app, Model) {
                 let allMessages = {
 
                 };
+
                 user.friends.forEach((friend) => {
-                    allMessages[friend.username] = friend.messages
+                    allMessages[friend.username] = {
+                        fullname: friend.first_name + ' ' + friend.last_name,
+                        username: friend.username,
+                        messages: friend.messages
+                    }
                 })
 
                 res.send(allMessages)

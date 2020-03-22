@@ -8,13 +8,14 @@ html
         link(rel='stylesheet' href='/css/grid.css')
 
     body
-        .container
+        .container(data-user=`${user}`)
           .messages-area.active-area
               .top
                 .actions
                 .search-container
                   input.search(type='text' placeholder='Search')
-              .messages-div
+                  button.submit(type="submit") Search
+              .messages-div.active-left
                   each friend in friends
                       .message(data-img='/src/img/download.png' data-username=`${friend.username}`)
                           .image-div
@@ -24,6 +25,8 @@ html
                                   span#username #{friend.first_name + ' ' + friend.last_name}
                               .msg-content
                                   span.msg-span #{friend.messages[friend.messages.length-1]}
+              .search-div.inactive-left
+                  
 
           .main-area
               .chat-header
@@ -34,7 +37,7 @@ html
                       img#header-img.friend-avatar.header-img(src='' alt='profile picture' srcset='')
                 .main-header
                   .name
-                    span#header-username(data-username="") Yvonne Jeffrey
+                    span#header-username Yvonne Jeffrey
                   .lastseen
                     span#lastseen last seen at 11:09
                 .header-actions
@@ -79,7 +82,7 @@ html
         script(src="/socket.io/socket.io.js")
         script(src="/js/jquery-3.4.1.min.js")
         script(src='/js/grid.js' type="module")
-        script(src="/js/chat(2).js" type="module")
+        script(src="/js/chat.js" type="module")
         script(src="/js/search.js" type="module")
         script(src="/js/ui.js")
         script(src="/js/notifications.js" type="module")

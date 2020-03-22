@@ -10,14 +10,14 @@ export function friendClick() {
         person.addEventListener('click', function(e) {
     
             msgArea.classList.remove('active-area')
-            mainArea.classList.toggle('active-area');
+            mainArea.classList.add('active-area');
     
             console.log(this.childNodes)
     
-            let username = this.children[1].children[0].children[0].innerText;
+            let fullName = this.children[1].children[0].children[0].innerText;
             
             let nameSpan = document.querySelector('#header-username');
-            nameSpan.innerText = username;
+            nameSpan.innerText = fullName;
     
             let headerImg = document.querySelector('#header-img');
 
@@ -29,7 +29,7 @@ export function friendClick() {
     backBtn.addEventListener('click', function(e) {
     
         mainArea.classList.remove('active-area');
-        msgArea.classList.toggle('active-area');
+        msgArea.classList.add('active-area');
     
     })
 } 
