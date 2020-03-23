@@ -249,7 +249,7 @@ $(function() {
 
 
     $('.search-txt').on('keyup', function () {
-        console.log('<i>typing</i>')
+        if(this.value.trim() == '') return;
         var url = new URL(`${window.location.origin}/search`),
             params = {username: this.value.toLowerCase()}
         
