@@ -12,6 +12,15 @@ html
           .messages-area.active-area
               .top
                 .actions
+                .actions-mobile
+                  .menu.actions-action
+                    i.fas.fa-bars
+                  .app-name
+                    span Converge
+                  .search-box
+                    input.search-txt(type="text", placeholder="Search")
+                    a(href="#").search-btn
+                      i.fas.fa-search
                 .search-container
                   input.search(type='text' placeholder='Search')
                   button.submit(type="submit") Search
@@ -39,7 +48,7 @@ html
                   .name
                     span#header-username Yvonne Jeffrey
                   .lastseen
-                    span#lastseen last seen at 11:09
+                    span#lastseen ...
                 .header-actions
                   span.action
                     i.fas.fa-search.header-icon

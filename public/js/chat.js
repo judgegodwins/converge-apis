@@ -146,6 +146,7 @@ $(function() {
 
 
     function messageClick(e) {
+        $('.search-box').css({'display': 'none'});
         console.log('calling message click');
         let friendUsername = this.dataset.username;
         socket.emit('join', {friend: friendUsername});
@@ -158,12 +159,8 @@ $(function() {
 
         document.cookie = `current_joined=${this.dataset.username}`
 
-        if(friendMessages[friendUsername].activeStatus) {
-
-                $('#lastseen').html(friendMessages[friendUsername].activeStatus);
-        } else {
-            console.log(this.dataset.username)
-            socket.emit('bring_status', {username: this.dataset.username}, (status, fromDb) => {
+        function bringStatus(username) {
+            socket.emit('bring_status', {username: username}, (status, fromDb) => {
                 console.log('bringing status')
                 console.log('status: ', status)
                 if(status != 'online') {
@@ -179,6 +176,20 @@ $(function() {
                     $('#lastseen').html(status) 
                 }
             });
+        }
+
+        if(friendMessages[friendUsername]) {
+
+            if(friendMessages[friendUsername].activeStatus) {
+
+                $('#lastseen').html(friendMessages[friendUsername].activeStatus);
+
+            } else {
+                bringStatus(this.dataset.username);
+            }
+
+        } else {
+            bringStatus(this.dataset.username);
         }
 
         try {
@@ -237,12 +248,8 @@ $(function() {
     })
 
 
-    $('.search').on('keyup', function () {
-        $('.messages-div').addClass('inactive-left');
-        $('.messages-div').removeClass('active-left');
-        $('.search-div').addClass('active-left');
-        $('.search-div').removeClass('inactive-left');
-
+    $('.search-txt').on('keyup', function () {
+        console.log('<i>typing</i>')
         var url = new URL(`${window.location.origin}/search`),
             params = {username: this.value.toLowerCase()}
         
@@ -266,6 +273,25 @@ $(function() {
                 friendClick();
                 $('.message').click(messageClick);
             })
+    })
+
+    $('.search-btn').click(function() {
+        console.log('click search-btn')
+        console.log(this.innerHTML);
+        if(this.children[0].classList.contains('fa-arrow-left')) {
+            this.innerHTML = '<i class="fas fa-search"></i>';
+            $('.search-div').addClass('inactive-left');
+            $('.search-div').removeClass('active-left');
+            $('.messages-div').addClass('active-left');
+            $('.messages-div').removeClass('inactive-left');
+        } else {
+            this.innerHTML = '<i class="fas fa-arrow-left"></i>';
+            $('.messages-div').addClass('inactive-left');
+            $('.messages-div').removeClass('active-left');
+            $('.search-div').addClass('active-left');
+            $('.search-div').removeClass('inactive-left');
+        }
+        $('.search-txt').toggleClass('active');
     })
 })
 
