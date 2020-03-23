@@ -411,7 +411,7 @@ body {
 }
 
 .search-txt.active {
-    width: 85.3vw;
+    width: calc(100vw - 60px);
     padding: 0 6px;
     float: right;
 }
@@ -514,6 +514,9 @@ input.search-txt::placeholder, input.search-txt:-ms-input-placeholder {
     }
 
     input.search-txt.active::placeholder {
+        color: #fff;
+    }
+    input.search-txt.active:-ms-input-placeholder {
         color: #fff;
     }
 }
