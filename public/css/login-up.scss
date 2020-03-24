@@ -1,0 +1,223 @@
+/*.input-field-cont input:focus{
+	padding: 10px 0 0 20px;
+	height: 70px;
+}*/
+/*button[type="submit"]:focus, button[type="submit"]:active{
+	transform: var(--pressed-transform);
+	box-shadow: var(--pressed-shadow);
+	border: var(--weight) solid var(--main);
+	color: var(--main);
+}*/
+/*# sourceMappingURL=login-up.css.map */
+* {
+	padding: 0;
+	margin: 0;
+	-webkit-box-sizing: 0;
+	box-sizing: 0;
+	font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+:root {
+	--main: #21adf2;
+	--secondary: #333349;
+	--background: #ffffff;
+    --normal-shadow: 0 0 24px rgba(0, 0, 0, 0.12);
+    
+	--solid-shadow: 5px 5px 0 var(--secondary);
+	--unpressed-transform: translate(-5px, -5px);
+	--pressed-transform: translate(0px, 0px);
+	--pressed-shadow: 0px 0px 0 var(--main);
+	--radius: 0.35em;
+	--weight: 2px;
+}
+
+
+.action-btn {
+	padding: 8px 12px;
+	color: var(--secondary);
+    cursor: pointer;
+
+}
+
+.solid-theme--btn{
+    padding: 8px 12px;
+	color: var(--secondary);
+    border-radius: var(--radius);
+	border: var(--weight) solid var(--secondary);
+	box-shadow: var(--solid-shadow);
+    transform: var(--unpressed-transform);
+
+    &:focus {
+		transform: var(--pressed-transform);
+		box-shadow: var(--pressed-shadow);
+		border: var(--weight) solid var(--main);
+		color: var(--main);
+    }
+    
+	&:active {
+		transform: var(--pressed-transform);
+		box-shadow: var(--pressed-shadow);
+		border: var(--weight) solid var(--main);
+		color: var(--main);
+	}
+
+
+}
+
+.solid-theme--input{
+    border: var(--weight) solid var(--secondary);
+    border-radius: var(--radius);
+    box-shadow: var(--solid-shadow);
+    transform: var(--unpressed-transform);
+    padding: 10px 0 0 20px;
+    font-family: sans-serif;
+    outline: none;
+    background: none;
+
+    &:hover {
+        transform: var(--pressed-transform);
+        box-shadow: var(--pressed-shadow);
+    }
+    
+    &:focus {
+        transform: var(--pressed-transform);
+        box-shadow: var(--pressed-shadow);
+    }
+    
+    &:valid {
+        transform: var(--pressed-transform);
+        box-shadow: var(--pressed-shadow);
+        border: var(--weight) solid var(--main);
+    }
+
+}
+
+.solid-theme--account-action{
+	border-bottom: var(--weight) solid var(--secondary);
+}
+
+@media screen and (min-width: 769px) {
+	.solid-theme--account-action{
+		border-right: var(--weight) solid var(--secondary);
+		border-bottom: none;
+	}
+}
+
+.solid-theme--container{
+	box-shadow: var(--solid-shadow);
+	border: var(--weight) solid var(--secondary);
+	border-radius: var(--radius);
+
+}
+
+body {
+	background: var(--background);
+}
+
+#main {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	min-height: 100vh;
+}
+.form-container {
+	width: 85%;
+    overflow: hidden;
+    
+	* {
+		transition: all 0.12s ease;
+		font-size: 18px;
+    }
+    
+	& > div {
+		padding: 12px;
+    }
+    
+	form {
+		padding: 12px;
+	}
+}
+
+@media screen and (min-width: 769px) {
+	.form-container {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+	}
+}
+
+.account-action {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background: var(--main);
+	a {
+		button {
+            background: var(--background);
+		}
+	}
+}
+.form-content-cont {
+	width: 85%;
+	margin: auto;
+	position: relative;
+}
+
+.input-field-cont {
+	height: 70px;
+	width: 100%;
+	margin: 24px 0;
+    position: relative;
+    
+	&:focus {
+		background: yellow;
+    }
+    
+	input {
+		width: calc(100% - 20px);
+		height: 60px;
+		padding: 10px 0 0 20px;
+		font-family: sans-serif;
+		outline: none;
+		background: none;
+                
+		&:focus+label {
+			span {
+				transform: translateY(-112.5%) scale(0.8);
+				opacity: 0.6;
+				transform-origin: left;
+				color: var(--main);
+				transform: translateY(-112.5%) scale(0.8);
+				opacity: 0.6;
+				transform-origin: left;
+			}
+		}
+		&:valid+label {
+			span {
+				transform: translateY(-112.5%) scale(0.8);
+				opacity: 0.6;
+				transform-origin: left;
+				color: var(--main);
+			}
+		}
+    }
+    
+	label {
+		position: absolute;
+		top: 50%;
+		left: 0;
+		transform: translate(0, -50%);
+		width: 100%;
+        height: 100%;
+        cursor: pointer;
+        
+		span {
+			position: absolute;
+			top: 50%;
+			left: 20px;
+			transform: translate(0, -50%);
+		}
+	}
+}
+
+button[type="submit"] {
+	background: none;
+}
