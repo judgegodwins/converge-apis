@@ -130,7 +130,7 @@ body {
     display: grid;
     grid-template-columns: auto 3fr auto;
     grid-template-rows: 100%;
-    padding: 10px 16px 10px 0;
+    padding: 10px 16px 10px 16px;
     height: 60px;
 }
 
@@ -410,6 +410,10 @@ body {
     color: #fff;
 }
 
+.search-box.inactive {
+    display: none;
+}
+
 .search-txt.active {
     width: calc(100vw - 60px);
     padding: 0 6px;
@@ -418,7 +422,7 @@ body {
 
 
 
-.search-btn {
+.search-btn, .close {
     float: right;
     color: #fff !important;
     width: 60px;
@@ -442,6 +446,24 @@ body {
     width: 0;
 }
 
+.search-txt.desktop {
+    width: 90%;
+    color: #000;
+    font-size: 14px;
+    height: 50%;
+    background: #eee;
+    padding-left: 10px;
+}
+
+.search-txt.desktop:active, .search-txt.desktop:hover {
+    background: #fff;
+    border: 1px solid rgba(100, 100, 100, .5);
+}
+
+input.search-txt.desktop::placeholder {
+    color: rgba(0, 0, 0, .5);
+}
+
 input.search-txt::placeholder, input.search-txt:-ms-input-placeholder {
     color: #fff;
 }
@@ -458,6 +480,7 @@ input.search-txt::placeholder, input.search-txt:-ms-input-placeholder {
     .chat-header {
         background-color: #4f66ba;
         color: #fff;
+        padding: 10px 16px 10px 0;
     }
 
     .chat-header i, .chat-header span {

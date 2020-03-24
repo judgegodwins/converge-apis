@@ -22,8 +22,8 @@ html
                     a(href="#").search-btn
                       i.fas.fa-search
                 .search-container
-                  input.search(type='text' placeholder='Search')
-                  button.submit(type="submit") Search
+                    input.search-txt.desktop(type='text' placeholder='Search')
+                    
               .messages-div.active-left
                   each friend in friends
                       .message(data-img='/src/img/download.png' data-username=`${friend.username}`)

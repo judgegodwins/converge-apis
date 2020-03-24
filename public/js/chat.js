@@ -45,7 +45,11 @@ $(function() {
                          <span id="username">${person.fullname ? person.fullname : person.first_name + ' ' + person.last_name}</span>
                      </div>
                      <div class="msg-content">
-                         <span class="msg-span">${friendMessages[person.username] ? friendMessages[person.username].messages[friendMessages[person.username].messages.length-1].content : '@' + person.username}</span>
+                         <span class="msg-span" data-username="${person.username}">${friendMessages[person.username] ? friendMessages[person.username].messages[friendMessages[person.username].messages.length-1].content : '@' + person.username}
+                         <span class="read-status" style="font-size: lighter;">
+                            <i class="fas fa-check"></i>
+                        </span>
+                         </span>
                      </div>
                  </div>
              </div>
@@ -83,7 +87,7 @@ $(function() {
                 </div>
                 <div class="message-time">
                     <span class="time">${time}</span>
-                    <span>
+                    <span class="read-status">
                         ${elclass == 'you-message' ? '<i class="fas fa-check"></i>' : ''}
                     </span>
                 </div>
@@ -110,7 +114,18 @@ $(function() {
             try {
                 var msgInd = friendMessages[friend].messages;
                 msgInd.push({content: msg, type: 'sent'})
-                $('.msg-span').html(msgInd[msgInd.length-1].content)
+
+                var msgSpan = document.querySelectorAll('.msg-span');
+                console.log('message: ', msgSpan)
+                msgSpan.forEach((ms) => {
+                    if(ms.dataset.username === friend) {
+                        ms.innerHTML = msgInd[msgInd.length-1].content + 
+                        `<span class="read-status" style="font-size: lighter;">
+                            <i class="fas fa-check"></i>
+                        </span>`
+                    }
+                })
+
             } catch (err) {
 
             }
@@ -126,13 +141,31 @@ $(function() {
 
     socket.on('new_msg', function(data) {
 
-        console.log(data.message)
-  
-        chatArea.innerHTML = newMessage(data.message, 'other-message', null) + chatArea.innerHTML;
+        let u = document.getElementById('header-username');
+        if(u.dataset.username == data.username) {
+            chatArea.innerHTML = newMessage(data.message, 'other-message', null) + chatArea.innerHTML;
+            let mainArea = document.querySelector('.main-area');
+            if(mainArea.classList.contains('active-area')) {
+                socket.emit('read', {username: $('.container').data('user')})
+            }
+        }
+        
+        socket.emit('delivered', {receivingUser: $('.container').data('user'), otherUser: data.username})
+
         var msgInd = friendMessages[data.username].messages
         msgInd.push({content: data.message, type: 'received'})
 
-        $('.msg-span').html(msgInd[msgInd.length-1].content)
+        var msgSpan = document.querySelectorAll('.msg-span');
+        
+        msgSpan.forEach((ms) => {
+            console.log('message span', ms);
+            console.log(ms.dataset.username)
+            if(ms.dataset.username === data.username) {
+                console.log('msgSpan: ', ms);
+                ms.innerHTML = msgInd[msgInd.length-1].content
+            }
+        })
+
 
         socket.emit('save_message', {message: data.message, username: data.username})
 
@@ -144,9 +177,31 @@ $(function() {
     })
 
 
+    function getReadStatus(readSt) {
+        socket.on(readSt, (data) => {
+            let msg = document.querySelectorAll('.msg-span');
+            
+            console.log(msg)
+    
+            msg.forEach((target) => {
+                if(target.dataset.username === data.username) {
+                    console.log('children[0]: ', target.children[0].children[0]);
+                    target.children[0].children[0].classList.remove('fa-check');
+                    target.children[0].children[0].classList.add('fa-check-double');
+                    if(readSt == 'read') target.children[0].children[0].style.color = '#0f0';
+                }
+            })
+    
+        })
+    }
+
+    // getReadStatus('read');
+    // getReadStatus('delivered')
+
+
 
     function messageClick(e) {
-        $('.search-box').css({'display': 'none'});
+        $('.search-box').addClass('inactive');
         console.log('calling message click');
         let friendUsername = this.dataset.username;
         socket.emit('join', {friend: friendUsername});
@@ -157,7 +212,7 @@ $(function() {
         let span = document.querySelector('#header-username');
         span.dataset.username = this.dataset.username;
 
-        document.cookie = `current_joined=${this.dataset.username}`
+        document.cookie = `current_joined=${friendUsername}`
 
         function bringStatus(username) {
             socket.emit('bring_status', {username: username}, (status, fromDb) => {
@@ -167,7 +222,7 @@ $(function() {
                     let lastSeen = `last seen ${parseDate(status)}`
                     $('#lastseen').html(lastSeen);
                     try {
-                        friendMessages[this.dataset.username].activeStatus = lastSeen;
+                        friendMessages[friendUsername].activeStatus = lastSeen;
                         console.log('lastSeen FriendMessages: ', friendMessages)
                     } catch(err) {
                         return;
@@ -177,6 +232,8 @@ $(function() {
                 }
             });
         }
+
+        socket.emit('read', {username: $('.container').data('user')});
 
         if(friendMessages[friendUsername]) {
 

@@ -69,7 +69,6 @@ function socketConnection(io, Model) {
                 })
             })
 
-            console.log('socket.req.user: ', socket.request.user);
             users.splice(users.indexOf(users.filter((x) => {
                 return x.id === socket.id;
             })[0]), 1);
@@ -107,11 +106,25 @@ function socketConnection(io, Model) {
             }
         })
 
+        socket.on('read', (data) => {
+            console.log('user has read')
+            console.log(data.username, ' has read')
+            socket.to(currentJoined).emit('read', {username: data.username})
+        })
+
+        socket.on('delivered', (data) => {
+            let target = users.find((x) => {
+                return x.name == data.otherUser;
+            }).id;
+            socket.join(target);
+            socket.to(target).emit('delivered', {username: data.receivingUser})
+        })
+
 
         // io.to(socket.id).emit('handle', handle)
         socket.on('new_message', (data) => {
             console.log(currentJoined)
-            console.log('received new message: ', data.message)
+            console.log('received new message: ', data.message, ' ', data.toUser);
             Model.findOne({username: socket.request.user.username}).select({password: 0}).exec((err, sender) => {
                 Model.findOne({username: data.toUser}).select({password: 0}).exec((err, receiver) => {
 
@@ -130,15 +143,13 @@ function socketConnection(io, Model) {
                             time: new Date()
                         })
 
-                        console.log('sender username: ', sender.username);
-                        console.log('receiver friend: ', receiver.friends[receiver.friends.indexOf(indexOfFriend(receiver, sender.username))]);
+                        
                         receiver.friends[receiver.friends.indexOf(indexOfFriend(receiver, sender.username))].messages.push({
                             content: data.message,
                             type: 'received',
                             time: new Date()
                         })
                     } else {
-                        console.log('not yet in friend list, adding to friendlist');
                         sender.friends.push({
                             username: receiver.username,
                             first_name: receiver.first_name,
@@ -163,8 +174,7 @@ function socketConnection(io, Model) {
                             }]
                         })
 
-                        console.log('sender: ', sender)
-                        console.log('users array: ', users)
+
                         let user1 = users.filter((x) => {
                             return x.name == sender.username;
                         })[0].id,

@@ -21,7 +21,7 @@ module.exports = function(app, Model) {
                 return next(null, false);
             } else {
                 let user = new Model({
-                    username: req.body.username,
+                    username: req.body.username.toLowerCase(),
                     first_name: req.body.firstname,
                     last_name: req.body.lastname,
                     gender: req.body.gender,
@@ -177,6 +177,20 @@ module.exports = function(app, Model) {
     app.get('/rem', (req, res) => {
         Model.remove({}, (err, data) => {
             if(!err) res.send('success')
+        })
+    })
+
+    app.get('/change', (req, res) => {
+        Model.find({}, (err, data) => {
+            data.forEach((user) => {
+                user.username = user.username.toLowerCase();
+                user.friends.forEach((friend) => {
+                    friend.username = friend.username.toLowerCase();
+                })
+                user.save((err, data) => {
+                    if(!err) console.log(user.username);
+                })
+            })
         })
     })
 }

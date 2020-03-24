@@ -1,6 +1,6 @@
 html
   head
-    title Login
+    title Register
   body(style="display: flex; justify-content: center; align-items: center")
     form(action="/create_account", method="POST", style="display: flex; flex-direction: column")
        label(for="username") Username
@@ -24,3 +24,4 @@ html
        button(type="submit") Create account
     
     a(href="/login") Already have an account?
+    script(src="/js/lowercase.js")
