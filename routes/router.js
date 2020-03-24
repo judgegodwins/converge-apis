@@ -131,11 +131,11 @@ module.exports = function(app, Model) {
         })})
     })
 
-    app.get('/all', (req, res) => {
-        Model.find({}, (err, data) => {
-            if(!err) res.send(data)
-        })
-    })
+    // app.get('/all', (req, res) => {
+    //     Model.find({}, (err, data) => {
+    //         if(!err) res.send(data)
+    //     })
+    // })
     app.get('/friends', (req, res) => {
         res.render('friends_list', {friends: req.user.friends.filter((friend) => {
             return friend.friends_status === true;
@@ -174,23 +174,10 @@ module.exports = function(app, Model) {
         })
     })
 
-    app.get('/rem', (req, res) => {
-        Model.remove({}, (err, data) => {
-            if(!err) res.send('success')
-        })
-    })
+    // app.get('/rem', (req, res) => {
+    //     Model.remove({}, (err, data) => {
+    //         if(!err) res.send('success')
+    //     })
+    // })
 
-    app.get('/change', (req, res) => {
-        Model.find({}, (err, data) => {
-            data.forEach((user) => {
-                user.username = user.username.toLowerCase();
-                user.friends.forEach((friend) => {
-                    friend.username = friend.username.toLowerCase();
-                })
-                user.save((err, data) => {
-                    if(!err) console.log(user.username);
-                })
-            })
-        })
-    })
 }
