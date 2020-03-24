@@ -112,13 +112,13 @@ function socketConnection(io, Model) {
             socket.to(currentJoined).emit('read', {username: data.username})
         })
 
-        socket.on('delivered', (data) => {
-            let target = users.find((x) => {
-                return x.name == data.otherUser;
-            }).id;
-            socket.join(target);
-            socket.to(target).emit('delivered', {username: data.receivingUser})
-        })
+        // socket.on('delivered', (data) => {
+        //     let target = users.find((x) => {
+        //         return x.name == data.otherUser;
+        //     }).id;
+        //     socket.join(target);
+        //     socket.to(target).emit('delivered', {username: data.receivingUser})
+        // })
 
 
         // io.to(socket.id).emit('handle', handle)
@@ -180,30 +180,37 @@ function socketConnection(io, Model) {
                         })[0].id,
                             user2;
                         try {
-                            user2= users.filter((x) => {
+                            user2 = users.filter((x) => {
                                 return x.name == receiver.username;
                             })[0].id;
+                            emitNewMsg(sender, user1, receiver);
+                            emitNewMsg(receiver, user2, sender);
                         } catch(err) {
-
+                            console.log(err);
+                            emitNewMsg(receiver, user2, sender);
                         }
                         
                         console.log('user1: ', user1);
 
                         console.log('user2: ', user2)
+
                         function emitNewMsg(user, userSocket, otherUser) {
+                            console.log('emitting new msgs', );
                             let userIndex = user.friends.find((x) => {
                                 return x.username === otherUser.username;
                             });
+                            console.log('socket: ', socket);
                             console.log('userIndex: ', userIndex);
+                            console.log('socket rooms: ', socket.rooms);
+
                             socket.join(userSocket);
+                            console.log('socket rooms after joining: ', socket.rooms);
                             socket.to(userSocket).emit('add_new_messages', {
                                 username: otherUser.username,
                                 messages: user.friends[user.friends.indexOf(userIndex)].messages
                             })
-                        }
 
-                        emitNewMsg(sender, user1, receiver);
-                        emitNewMsg(receiver, user2, sender);
+                        }
 
 
                     }

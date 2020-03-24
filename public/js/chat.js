@@ -106,10 +106,6 @@ $(function() {
             if(msg == '') return;
 
             socket.emit('new_message', {message: msg, toUser: friend, fullName: $('#header-username').html()});
-            
-            socket.on('add_new_messages', (data) => {
-                console.log('add_new_messages data: ', data);
-            })
 
             try {
                 var msgInd = friendMessages[friend].messages;
@@ -138,6 +134,9 @@ $(function() {
     }
 
 
+    socket.on('add_new_messages', (data) => {
+        console.log('add_new_messages data: ', data);
+    })
 
     socket.on('new_msg', function(data) {
 
