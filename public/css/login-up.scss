@@ -188,7 +188,12 @@
 
 .neu-theme--account-action {
     margin: 18px;
+    height: calc(100% - (18px * 2))!important;
     border-radius: var(--radius);
+
+    &.slider-active{
+        width: calc(50% - 18px);
+    }
 }
 
 .neu-theme--btn {
