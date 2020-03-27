@@ -61,7 +61,7 @@ const app = (() => {
             console.log('service worker registered')
             swReg = reg;
 
-            require.update();
+            // re.update();
 
             reg.pushManager.getSubscription()
             .then(subscription => {
