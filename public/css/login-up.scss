@@ -318,7 +318,7 @@ body {
 
     * {
         transition: all 0.12s ease;
-        font-size: 18px;
+        font-size: 14px;
     }
 
     .form-wrapper{
@@ -355,6 +355,25 @@ body {
     .form-container {
         display: grid;
         grid-template-columns: 1fr 1fr;
+
+        *{
+            font-size: 18px;
+        }
+
+        .form-wrapper{
+            form{
+                &[data-active="false"]{
+                    position: relative;
+                    opacity: 0;
+                    pointer-events: none;
+                }
+                &[data-active="true"]{
+                    position: relative;
+                    opacity: 1;
+                    pointer-events: all;
+                }    
+            }
+        }
     }
 
     .account-action {
