@@ -115,6 +115,12 @@
     .solid-theme--account-action {
         border-right: var(--weight) solid var(--secondary);
         border-bottom: none;
+
+//       support for switch func
+        &.slider-active{
+            border-right: none;
+            border-left: var(--weight) solid var(--secondary);
+        }
     }
 }
 

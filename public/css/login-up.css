@@ -125,6 +125,10 @@
     border-right: var(--weight) solid var(--secondary);
     border-bottom: none;
   }
+  .solid-theme--account-action.slider-active {
+    border-right: none;
+    border-left: var(--weight) solid var(--secondary);
+  }
 }
 
 .solid-theme--container {
