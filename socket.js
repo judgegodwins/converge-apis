@@ -238,7 +238,7 @@ function socketConnection(io, Model) {
 
 
 
-                    sender.save((err, d1) => {
+                    sender.save((err, d) => {
                         if(err) console.log(err);
                         receiver.save((err, d1) => {
                             if(err) console.log(err)
