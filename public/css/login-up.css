@@ -211,6 +211,29 @@
   border: var(--weight) solid var(--main);
 }
 
+.flat-theme.--radio-field-cont input {
+  display: none;
+}
+
+.flat-theme.--radio-field-cont input:checked + label {
+  background: var(--flat-bg-active);
+  border: var(--weight) solid var(--main);
+  color: var(--main);
+}
+
+.flat-theme.--radio-field-cont label {
+  border: none;
+  border-radius: var(--radius);
+  outline: none;
+  background: var(--flat-bg);
+  color: var(--secondary);
+}
+
+.flat-theme.--radio-field-cont label:focus, .flat-theme.--radio-field-cont label:hover {
+  background: var(--flat-bg-active);
+  color: var(--main);
+}
+
 .flat-theme.--container {
   border-radius: var(--radius);
   background: var(--background);

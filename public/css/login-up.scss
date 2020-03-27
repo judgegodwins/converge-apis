@@ -202,6 +202,32 @@
     }
 }
 
+.flat-theme.--radio-field-cont{
+    input{
+        display: none;
+
+        &:checked + label{
+            background: var(--flat-bg-active);
+            border: var(--weight) solid var(--main);
+            color: var(--main);
+        }
+    }
+
+    label{
+        border: none;
+        border-radius: var(--radius);
+        outline: none;
+        background: var(--flat-bg);
+        color: var(--secondary);
+                
+        &:focus, &:hover{
+            background: var(--flat-bg-active);
+            color: var(--main);
+        }
+    }
+
+}
+
 .flat-theme.--container {
     border-radius: var(--radius);
     background: var(--background);
