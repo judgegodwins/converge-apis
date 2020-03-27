@@ -37,8 +37,10 @@
   --flat-bg: #e2eaef;
   --flat-bg-active: #21adf212;
   --neu-shadow: 5px 5px 15px rgba(40, 46, 49, 0.122), -5px -5px 15px rgba(255, 255, 255, 0.678);
-  --neu-shadow-soft: 5px 5px 8px rgba(0, 0, 0, 0.1), -5px -5px 12px rgba(255, 255, 255, 0.26), inset -5px -5px 8px rgba(0, 0, 0, 0.1), inset 5px 5px 12px rgba(255, 255, 255, 0.26);
-  --pressed-neu-shadow-soft: -5px -5px 8px rgba(0, 0, 0, 0.1), 5px 5px 12px rgba(255, 255, 255, 0.26), inset 5px 5px 8px rgba(0, 0, 0, 0.1), inset -5px -5px 12px rgba(255, 255, 255, 0.26);
+  --neu-shadow-soft: 5px 5px 8px rgba(0, 0, 0, 0.1), -5px -5px 12px rgba(255, 255, 255, 0.4), inset -5px -5px 8px rgba(0, 0, 0, 0.1), inset 5px 5px 12px rgba(255, 255, 255, 0.4);
+  --neu-shadow-soft-alt: 5px 5px 8px rgba(0, 0, 0, 0.1), -5px -5px 12px rgba(255, 255, 255, 0.2), inset -5px -5px 8px rgba(0, 0, 0, 0.1), inset 5px 5px 12px rgba(255, 255, 255, 0.2);
+  --pressed-neu-shadow-soft: -5px -5px 8px rgba(0, 0, 0, 0.1), 5px 5px 12px rgba(255, 255, 255, 0.4), inset 5px 5px 8px rgba(0, 0, 0, 0.1), inset -5px -5px 12px rgba(255, 255, 255, 0.4);
+  --pressed-neu-shadow-soft-alt: -5px -5px 8px rgba(0, 0, 0, 0.1), 5px 5px 12px rgba(255, 255, 255, 0.2), inset 5px 5px 8px rgba(0, 0, 0, 0.1), inset -5px -5px 12px rgba(255, 255, 255, 0.2);
 }
 
 .action-btn {
@@ -223,6 +225,21 @@
   padding: 6px 10px;
   border-radius: var(--radius);
   border: 1px solid var(--main);
+}
+
+.neu-theme.--btn.alt-btn {
+  -webkit-box-shadow: var(--neu-shadow-soft-alt);
+          box-shadow: var(--neu-shadow-soft-alt);
+}
+
+.neu-theme.--btn.alt-btn span {
+  color: var(--background);
+  border: none;
+}
+
+.neu-theme.--btn.alt-btn:active {
+  -webkit-box-shadow: var(--pressed-neu-shadow-soft);
+          box-shadow: var(--pressed-neu-shadow-soft);
 }
 
 .neu-theme.--btn:hover span,
