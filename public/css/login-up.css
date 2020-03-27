@@ -364,6 +364,18 @@ body {
   width: 100%;
 }
 
+.form-container .form-wrapper form[data-active="false"] {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.form-container .form-wrapper form[data-active="true"] {
+  position: relative;
+  opacity: 1;
+  pointer-events: all;
+}
+
 .form-container > div,
 .form-container form {
   padding: 12px;

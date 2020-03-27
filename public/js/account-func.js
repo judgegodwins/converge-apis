@@ -17,6 +17,8 @@ accountSwitchBtn.addEventListener("click", function(){
 
     if(createAccountForm.getAttribute("data-active") == "false"){
         createAccountForm.setAttribute("data-active", "true");
+        signInForm.setAttribute("data-active", "false");
+        accountSwitchBtn.querySelector("span").textContent = "Have an Account? Log in";
         console.log("false => true");
 
         signIn_Username.setAttribute("id", "null1");
@@ -31,6 +33,8 @@ accountSwitchBtn.addEventListener("click", function(){
 
     } else{
         createAccountForm.setAttribute("data-active", "false");
+        signInForm.setAttribute("data-active", "true");
+        accountSwitchBtn.querySelector("span").textContent = "Create An Account";
         console.log("true => false")
 
         signIn_Username.setAttribute("id", "username");

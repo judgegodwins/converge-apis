@@ -331,6 +331,17 @@ body {
 
         form{
             width: 100%;
+
+            &[data-active="false"]{
+                position: absolute;
+                opacity: 0;
+                pointer-events: none;
+            }
+            &[data-active="true"]{
+                position: relative;
+                opacity: 1;
+                pointer-events: all;
+            }
         }
     }
 
