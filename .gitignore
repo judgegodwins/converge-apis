@@ -21,6 +21,8 @@
 .env.test.local
 .env.production.local
 .env
+backup.txt
+goals.txt
 
 npm-debug.log*
 yarn-debug.log*

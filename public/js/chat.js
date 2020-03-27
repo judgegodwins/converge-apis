@@ -20,6 +20,16 @@ function setCookie(cookie) {
     }
 }
 
+function getPermission() {
+    if(!('Notification' in window)) {
+        return;
+    } else {
+        Notification.requestPermission(status => {
+            console.log('notification status: ', status);
+        })    
+    }
+}
+
 $(function() {
 
     var friendMessages = {
@@ -263,6 +273,9 @@ $(function() {
         } catch (err) {
 
         }
+
+        getPermission();
+        
 
     }
     $('.message').click(messageClick);

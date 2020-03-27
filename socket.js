@@ -1,6 +1,22 @@
+const webPush = require('web-push');
+
+const publicVapidKey = 'BOrQPL1CeyjJNJydzDcDjUozdvYjJFCeZLPUgvtl3Bp33kgUFzd8lvuvs79hFdgpbSPjb9N_kTDq265juEbPGLk',
+      privateVapidKey = process.env.VAPID_KEY;
+
+const webPushOptions = {
+    gcmAPIKey: process.env.GCMAPIKEY,
+    TTL: 60,
+    vapidDetails: {
+        subject: 'mailto: judgegodwins@gmail.com',
+        publicKey: publicVapidKey,
+        privateKey: privateVapidKey
+    }
+}
 
 
 function socketConnection(io, Model) {
+    const payload = 'New Notification';
+
 
     const users = []
 
@@ -32,6 +48,7 @@ function socketConnection(io, Model) {
                 })
 
             } else {
+
                 callback(person.status, false);
             }
 
@@ -123,10 +140,16 @@ function socketConnection(io, Model) {
 
         // io.to(socket.id).emit('handle', handle)
         socket.on('new_message', (data) => {
-            console.log(currentJoined)
-            console.log('received new message: ', data.message, ' ', data.toUser);
+
+            let receiverSub, senderFullname;
+
             Model.findOne({username: socket.request.user.username}).select({password: 0}).exec((err, sender) => {
+
+                senderFullname = sender.first_name + ' ' + sender.last_name
+
                 Model.findOne({username: data.toUser}).select({password: 0}).exec((err, receiver) => {
+
+                    receiverSub = JSON.parse(receiver.pushSubscription);
 
                     let movingFriend = indexOfFriend(sender, receiver.username);
 
@@ -225,9 +248,24 @@ function socketConnection(io, Model) {
                         })
                     })
 
+                    console.log('receiver-sub just before payload: ', receiverSub, senderFullname)
+
+                    const payload = JSON.stringify({"title": senderFullname, "message": data.message });
+                    console.log(webPush.sendNotification);
+                    // console.log(webPushOptions)
+                    webPush.sendNotification(
+                        receiverSub,
+                        payload,
+                        webPushOptions
+                    )
+                    .catch(err => {
+                        console.error('push error: ', err);
+                    })
+
                 })
 
             })
+
         })
 
         // socket.on('save_message', (data) => {
