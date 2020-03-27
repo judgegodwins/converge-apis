@@ -336,6 +336,34 @@
     }
 }
 
+.material-theme.--radio-field-cont{
+    align-items: center;
+
+    input{
+        display: none;
+
+        &:checked + label{
+            background: var(--background);
+            border: var(--weight) solid var(--main);
+            color: var(--main);
+        }
+    }
+
+    label{
+        padding: 12px;
+        background: var(--background);
+        color: var(--secondary);
+        border-radius: var(--radius);
+        border: var(--weight) solid var(--secondary);   
+        
+        &:focus, &:hover{
+            background: var(--main);
+            color: var(--background);
+        }
+    }
+
+}
+
 body {
     background: var(--background);
 }
@@ -489,11 +517,11 @@ body {
             }
         }
     
-        .radio-field-cont{
-            &:nth-last-child(1){
-                margin-left: 8px;
-            }
-        }
+        // .radio-field-cont{
+        //     &:nth-last-child(1){
+        //         margin-left: 8px;
+        //     }
+        // }
     
     }
 }
@@ -548,11 +576,13 @@ body {
 }
 
 .radio-field-cont{
-    display: flex;
+    display: inline-flex;
     align-items: center;
+    
 
     label{
         margin: 0 8px 0 0;
+        cursor: pointer;
     }
 }
 
