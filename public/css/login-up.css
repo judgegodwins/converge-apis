@@ -143,6 +143,11 @@
   background: var(--main);
 }
 
+.flat-theme.--btn.alt-btn {
+  background: var(--background);
+  color: var(--main);
+}
+
 .flat-theme.--btn:hover {
   -webkit-transform: scale(1.1);
           transform: scale(1.1);

@@ -135,6 +135,11 @@
 .flat-theme.--btn {
     background: var(--main);
 
+    &.alt-btn{
+        background: var(--background);
+        color: var(--main);
+    }
+
     &:hover {
         transform: scale(1.1);
     }
