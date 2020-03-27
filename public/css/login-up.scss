@@ -193,12 +193,18 @@
 
 .neu-theme.--account-action {
     margin: 18px;
-    height: calc(100% - (18px * 2))!important;
     border-radius: var(--radius);
+}
 
-    &.slider-active{
-        width: calc(50% - 18px);
+@media screen and (min-width: 769px){
+    .neu-theme.--account-action {
+        height: calc(100% - (18px * 2))!important;
+    
+        &.slider-active{
+            width: calc(50% - 18px);
+        }
     }
+    
 }
 
 .neu-theme.--btn {
@@ -221,7 +227,7 @@
             border: none;
         }
         &:active{
-            box-shadow: var(--pressed-neu-shadow-soft);
+            box-shadow: var(--pressed-neu-shadow-soft-alt);
         }
     }
 
@@ -356,6 +362,10 @@ body {
         display: flex;
         align-items: center;
 
+        &.wrapper-inactive{
+            padding: 0;
+        }
+
         // &#create-account{
         //     position: absolute;
         // }
@@ -462,20 +472,29 @@ body {
 }
 
 .group-cont{
-    display: flex;
+    display: inline-block;
+    width: 100%;
 
-    .input-field-cont{
-        margin-right: 12px;
-        &:nth-last-child(1){
-            margin-left: 12px;
-            margin-right: 0px;
-        }
-    }
+}
 
-    .radio-field-cont{
-        &:nth-last-child(1){
-            margin-left: 8px;
+@media screen and (min-width: 769px){
+    .group-cont{
+        display: flex;
+
+        .input-field-cont{
+            margin-right: 12px;
+            &:nth-last-child(1){
+                margin-left: 12px;
+                margin-right: 0px;
+            }
         }
+    
+        .radio-field-cont{
+            &:nth-last-child(1){
+                margin-left: 8px;
+            }
+        }
+    
     }
 }
 

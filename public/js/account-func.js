@@ -13,7 +13,9 @@ var createAccount_Pass = createAccountForm.querySelector("input.password");
 accountSwitchBtn.addEventListener("click", function(){
     accountSlider.classList.toggle("slider-active");
     signInForm.classList.toggle("form-active");
+    signInForm.parentElement.classList.toggle("wrapper-inactive");
     createAccountForm.classList.toggle("form-active");
+    createAccountForm.parentElement.classList.toggle("wrapper-inactive")
 
     if(createAccountForm.getAttribute("data-active") == "false"){
         createAccountForm.setAttribute("data-active", "true");
