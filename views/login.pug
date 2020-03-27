@@ -1,27 +1,28 @@
 doctype html
-// saved from url=(0027)http://localhost:5000/login
-html(lang='en')
+html(lang="en")
   head
-    meta(http-equiv='Content-Type', content='text/html; charset=UTF-8')
-    meta(name='viewport', content='width=device-width, initial-scale=1.0')
+    meta(http-equiv="Content-Type", content="text/html; charset=UTF-8")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
     title Login
-    link(rel='stylesheet', href='./css/login-up.css')
+    link(rel="stylesheet", href="./css/login-up.css")
   body
-    #main
-      .form-container.solid-theme--container
-        .account-action.solid-theme--account-action
-          a(href='/create_account')
-            button.action-btn.solid-theme--btn Create an account.
+    #main.material-theme--main
+      .form-container.material-theme--container
+        .account-action.material-theme--account-action
+          a(href="/create_account")
+            button.action-btn.material-theme--btn
+              span Create an account.
         .form-wrapper
-          form(action='/login', method='POST')
-            input.solid-theme--input(autocomplete="false", name="hidden", type="text", style="display:none")
+          form(action="/login", method="POST")
+            input.material-theme--input(autocomplete="false", name="hidden", type="text", style="display:none")
             .form-content-cont
               .input-field-cont
-                input.solid-theme--input#username(type='text', name='username',  autocomplete="off", required='required')
-                label(for='username')
+                input#username.material-theme--input(type="text", name="username", autocomplete="off", required="required")
+                label(for="username")
                   span Username
               .input-field-cont
-                input.solid-theme--input#password(type='password', name='password',  autocomplete="new-password", required='required')
-                label(for='password')
+                input#password.material-theme--input(type="password", name="password", autocomplete="new-password", required="required")
+                label(for="password")
                   span Password
-              button.action-btn.solid-theme--btn(type='submit') Login
+              button.action-btn.material-theme--btn(type="submit")
+                span Login

@@ -8,62 +8,83 @@
 	border: var(--weight) solid var(--main);
 	color: var(--main);
 }*/
-/*# sourceMappingURL=login-up.css.map */
+
 * {
-	padding: 0;
-	margin: 0;
-	-webkit-box-sizing: 0;
-	box-sizing: 0;
-	font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-}
-:root {
-	--main: #21adf2;
-	--secondary: #333349;
-	--background: #ffffff;
-    --normal-shadow: 0 0 24px rgba(0, 0, 0, 0.12);
-    
-	--solid-shadow: 5px 5px 0 var(--secondary);
-	--unpressed-transform: translate(-5px, -5px);
-	--pressed-transform: translate(0px, 0px);
-	--pressed-shadow: 0px 0px 0 var(--main);
-	--radius: 0.35em;
-	--weight: 2px;
+    padding: 0;
+    margin: 0;
+    box-sizing: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
 
+:root {
+    /* to maintain consistent colors
+      hsl variables will be used to adjust color options
+  */
+    --hue: 210;
+    --saturation: 88%;
+    --ligtness: 54%;
+    --main: hsl(var(--hue), var(--saturation), var(--ligtness));
+    --secondary: hsl(var(--hue), var(--saturation), 16%);
+    --background: #ffffff;
+    --background-shade: hsl(var(--hue), 30%, 95%);
+    --normal-shadow: 0 0 24px rgba(0, 0, 0, 0.12);
+    --radius: 0.35em;
+    --weight: 2px;
+    --solid-shadow: 5px 5px 0 var(--secondary);
+    --unpressed-transform: translate(-5px, -5px);
+    --pressed-transform: translate(0px, 0px);
+    --pressed-shadow: 0px 0px 0 var(--main);
+    --flat-bg: #e2eaef;
+    --flat-bg-active: #21adf212;
+    --neu-shadow: 5px 5px 15px rgba(40, 46, 49, 0.122), -5px -5px 15px rgba(255, 255, 255, 0.678);
+    --neu-shadow-soft: 5px 5px 8px rgba(0, 0, 0, 0.1), -5px -5px 12px rgba(255, 255, 255, 0.26), inset -5px -5px 8px rgba(0, 0, 0, 0.1), inset 5px 5px 12px rgba(255, 255, 255, 0.26);
+    --pressed-neu-shadow-soft: -5px -5px 8px rgba(0, 0, 0, 0.1), 5px 5px 12px rgba(255, 255, 255, 0.26), inset 5px 5px 8px rgba(0, 0, 0, 0.1), inset -5px -5px 12px rgba(255, 255, 255, 0.26);
+}
 
 .action-btn {
-	padding: 8px 12px;
-	color: var(--secondary);
+    color: var(--secondary);
+    border-radius: var(--radius);
+    border: none;
+    color: var(--background);
     cursor: pointer;
+    padding: 8px;
+    outline: none;
 
+    span {
+        display: inline-block;
+        padding: 8px 12px;
+    }
 }
 
-.solid-theme--btn{
+/*************************solid-theme*************************/
+
+.solid-theme--btn {
     padding: 8px 12px;
-	color: var(--secondary);
+    color: var(--secondary);
     border-radius: var(--radius);
-	border: var(--weight) solid var(--secondary);
-	box-shadow: var(--solid-shadow);
+    background: var(--background);
+    border: var(--weight) solid var(--secondary);
+    box-shadow: var(--solid-shadow);
     transform: var(--unpressed-transform);
 
-    &:focus {
-		transform: var(--pressed-transform);
-		box-shadow: var(--pressed-shadow);
-		border: var(--weight) solid var(--main);
-		color: var(--main);
+    &:focus,
+    &:hover {
+        transform: var(--pressed-transform);
+        box-shadow: var(--pressed-shadow);
+        border: var(--weight) solid var(--main);
+        color: var(--main);
     }
-    
-	&:active {
-		transform: var(--pressed-transform);
-		box-shadow: var(--pressed-shadow);
-		border: var(--weight) solid var(--main);
-		color: var(--main);
-	}
 
-
+    &:active {
+        transform: var(--pressed-transform);
+        box-shadow: var(--pressed-shadow);
+        background: var(--main);
+        color: var(--background);
+        border: var(--weight) solid var(--secondary);
+    }
 }
 
-.solid-theme--input{
+.solid-theme--input {
     border: var(--weight) solid var(--secondary);
     border-radius: var(--radius);
     box-shadow: var(--solid-shadow);
@@ -73,151 +94,322 @@
     outline: none;
     background: none;
 
-    &:hover {
-        transform: var(--pressed-transform);
-        box-shadow: var(--pressed-shadow);
-    }
-    
+    &:hover,
     &:focus {
         transform: var(--pressed-transform);
         box-shadow: var(--pressed-shadow);
     }
-    
+
     &:valid {
         transform: var(--pressed-transform);
         box-shadow: var(--pressed-shadow);
         border: var(--weight) solid var(--main);
     }
-
 }
 
-.solid-theme--account-action{
-	border-bottom: var(--weight) solid var(--secondary);
+.solid-theme--account-action {
+    border-bottom: var(--weight) solid var(--secondary);
 }
 
 @media screen and (min-width: 769px) {
-	.solid-theme--account-action{
-		border-right: var(--weight) solid var(--secondary);
-		border-bottom: none;
-	}
+    .solid-theme--account-action {
+        border-right: var(--weight) solid var(--secondary);
+        border-bottom: none;
+    }
 }
 
-.solid-theme--container{
-	box-shadow: var(--solid-shadow);
-	border: var(--weight) solid var(--secondary);
-	border-radius: var(--radius);
+.solid-theme--container {
+    box-shadow: var(--solid-shadow);
+    border: var(--weight) solid var(--secondary);
+    border-radius: var(--radius);
+}
 
+/*************************flat-theme*************************/
+
+.flat-theme--btn {
+    background: var(--main);
+
+    &:hover {
+        transform: scale(1.1);
+    }
+
+    &:active {
+        transform: scale(0.88);
+    }
+
+    &:focus {
+        transform: translateY(4px);
+    }
+}
+
+.flat-theme--input {
+    border: none;
+    border-radius: var(--radius);
+    padding: 10px 0 0 20px;
+    font-family: sans-serif;
+    outline: none;
+    background: var(--flat-bg);
+    color: var(--secondary);
+
+    &:hover,
+    &:focus {
+        background: var(--flat-bg-active);
+    }
+
+    &:valid {
+        background: var(--flat-bg-active);
+        border: var(--weight) solid var(--main);
+    }
+}
+
+.flat-theme--container {
+    border-radius: var(--radius);
+    background: var(--background);
+}
+
+.flat-theme--main,
+.neu-theme--main {
+    background: var(--background-shade);
+}
+
+/*************************neu-theme*************************/
+
+.neu-theme--container {
+    border-radius: var(--radius);
+    background: var(--background-shade);
+    box-shadow: var(--neu-shadow-soft);
+}
+
+.neu-theme--account-action {
+    margin: 18px;
+    border-radius: var(--radius);
+}
+
+.neu-theme--btn {
+    position: relative;
+    background: transparent;
+    color: var(--secondary);
+    box-shadow: var(--neu-shadow-soft);
+    padding: 8px;
+
+    span {
+        padding: 6px 10px;
+        border-radius: var(--radius);
+        border: 1px solid var(--main);
+    }
+
+    &:hover span,
+    &:focus span {
+        background: var(--main);
+        color: var(--background);
+    }
+
+    &:active {
+        box-shadow: var(--pressed-neu-shadow-soft);
+
+        span {
+            transform: scale(0.9);
+        }
+    }
+}
+
+.neu-theme--input {
+    position: relative;
+    border: none;
+    background: transparent;
+    color: var(--secondary);
+    box-shadow: var(--neu-shadow-soft);
+    padding: var(--weight);
+    border-radius: var(--radius);
+
+    &:hover,
+    &:focus {
+        box-shadow: var(--pressed-neu-shadow-soft);
+    }
+
+    &:valid {
+        box-shadow: var(--pressed-neu-shadow-soft);
+        background: #21adf209;
+    }
+}
+
+.material-theme--main {
+    background: var(--background);
+}
+
+.material-theme--container {
+    border-radius: var(--radius);
+    background: var(--background);
+    box-shadow: 0px 0px 36px 2px hsla(210, 88%, 54%, 0.12);
+}
+
+.material-theme--account-action {
+    position: relative;
+}
+
+.material-theme--btn {
+    position: relative;
+    background: transparent;
+    color: var(--secondary);
+    box-shadow: 0px 0px 36px 2px hsla(210, 88%, 54%, 0.12);
+    border: var(--weight) solid var(--main);
+
+    &:hover,
+    &:focus {
+        background: var(--main);
+        color: var(--background);
+        box-shadow: 0px 0px 36px 2px hsla(210, 88%, 54%, 0.5);
+    }
+
+    &:active {
+        transform: scale(0.9);
+    }
+}
+
+.input-field-cont input.material-theme--input {
+    &:focus+label span {
+        transform: translateY(calc(-200% + 12px)) scale(0.9);
+        color: var(--secondary);
+        transform-origin: left;
+        background: var(--background);
+        padding: 4px 6px;
+        opacity: 1;
+    }
+
+    &:valid+label span {
+        transform: translateY(calc(-200% + 12px)) scale(0.9);
+        transform-origin: left;
+        color: var(--main);
+        background: var(--background);
+        padding: 4px 6px;
+        opacity: 1;
+    }
+}
+
+.material-theme--input {
+    position: relative;
+    background: var(--background);
+    color: var(--secondary);
+    padding: 0 0 0 24px !important;
+    border-radius: var(--radius);
+    border: var(--weight) solid var(--secondary);
+
+    &:valid {
+        border: var(--weight) solid var(--main);
+    }
 }
 
 body {
-	background: var(--background);
+    background: var(--background);
 }
 
 #main {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
 }
+
 .form-container {
-	width: 85%;
+    width: 85%;
     overflow: hidden;
-    
-	* {
-		transition: all 0.12s ease;
-		font-size: 18px;
+    display: grid;
+
+    * {
+        transition: all 0.12s ease;
+        font-size: 18px;
     }
-    
-	& > div {
-		padding: 12px;
+
+    >div,
+    form {
+        padding: 12px;
     }
-    
-	form {
-		padding: 12px;
-	}
 }
 
 @media screen and (min-width: 769px) {
-	.form-container {
-		display: grid;
-		grid-template-columns: 1fr 1fr;
-	}
+    .form-container {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .account-action {
+        grid-column-start: 1;
+        grid-row-start: 1;
+    }
 }
 
 .account-action {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	background: var(--main);
-	a {
-		button {
-            background: var(--background);
-		}
-	}
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: var(--main);
+    grid-row-start: 2;
 }
+
+@media screen and (min-width: 769px) {
+    .account-action {
+        grid-column-start: 1;
+        grid-row-start: 1;
+    }
+}
+
 .form-content-cont {
-	width: 85%;
-	margin: auto;
-	position: relative;
+    width: 85%;
+    margin: auto;
+    position: relative;
 }
 
 .input-field-cont {
-	height: 70px;
-	width: 100%;
-	margin: 24px 0;
+    height: 70px;
+    width: 100%;
+    margin: 24px 0;
     position: relative;
-    
-	&:focus {
-		background: yellow;
+
+    input {
+        width: calc(100% - 20px);
+        height: 60px;
+        padding: 10px 0 0 20px;
+        font-family: sans-serif;
+        outline: none;
+
+        &:focus+label span {
+            transform: translateY(-112.5%) scale(0.8);
+            opacity: 0.6;
+            transform-origin: left;
+            color: var(--main);
+            transform: translateY(-112.5%) scale(0.8);
+            opacity: 0.6;
+            transform-origin: left;
+        }
+
+        &:valid+label span {
+            transform: translateY(-112.5%) scale(0.8);
+            opacity: 0.6;
+            transform-origin: left;
+            color: var(--main);
+        }
     }
-    
-	input {
-		width: calc(100% - 20px);
-		height: 60px;
-		padding: 10px 0 0 20px;
-		font-family: sans-serif;
-		outline: none;
-		background: none;
-                
-		&:focus+label {
-			span {
-				transform: translateY(-112.5%) scale(0.8);
-				opacity: 0.6;
-				transform-origin: left;
-				color: var(--main);
-				transform: translateY(-112.5%) scale(0.8);
-				opacity: 0.6;
-				transform-origin: left;
-			}
-		}
-		&:valid+label {
-			span {
-				transform: translateY(-112.5%) scale(0.8);
-				opacity: 0.6;
-				transform-origin: left;
-				color: var(--main);
-			}
-		}
-    }
-    
-	label {
-		position: absolute;
-		top: 50%;
-		left: 0;
-		transform: translate(0, -50%);
-		width: 100%;
+
+    label {
+        position: absolute;
+        top: 50%;
+        left: 0;
+        transform: translate(0, -50%);
+        width: 100%;
         height: 100%;
         cursor: pointer;
-        
-		span {
-			position: absolute;
-			top: 50%;
-			left: 20px;
-			transform: translate(0, -50%);
-		}
-	}
+
+        span {
+            position: absolute;
+            top: 50%;
+            left: 20px;
+            transform: translate(0, -50%);
+        }
+    }
 }
 
 button[type="submit"] {
-	background: none;
+    /* background: none; */
 }
+
+/*# sourceMappingURL=login-up.css.map */
