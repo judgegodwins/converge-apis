@@ -108,6 +108,35 @@
     }
 }
 
+.solid-theme.--radio-field-cont{
+    input{
+        display: none;
+
+        &:checked + label{
+            transform: var(--pressed-transform);
+            box-shadow: var(--pressed-shadow);
+            border: var(--weight) solid var(--main);
+            background: var(--main);
+            color: var(--background);
+        }
+    }
+
+    label{
+        border: var(--weight) solid var(--secondary);
+        border-radius: var(--radius);
+        box-shadow: var(--solid-shadow);
+        transform: var(--unpressed-transform);
+        font-family: sans-serif;
+            
+        &:focus, &:hover{
+            background: var(--main);
+            color: var(--background);
+        }
+    }
+
+}
+
+
 .solid-theme.--account-action {
     border-bottom: var(--weight) solid var(--secondary);
 }
@@ -578,11 +607,11 @@ body {
 .radio-field-cont{
     display: inline-flex;
     align-items: center;
-    
 
     label{
         margin: 0 8px 0 0;
         cursor: pointer;
+        padding: 12px;
     }
 }
 

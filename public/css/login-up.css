@@ -117,6 +117,35 @@
   border: var(--weight) solid var(--main);
 }
 
+.solid-theme.--radio-field-cont input {
+  display: none;
+}
+
+.solid-theme.--radio-field-cont input:checked + label {
+  -webkit-transform: var(--pressed-transform);
+          transform: var(--pressed-transform);
+  -webkit-box-shadow: var(--pressed-shadow);
+          box-shadow: var(--pressed-shadow);
+  border: var(--weight) solid var(--main);
+  background: var(--main);
+  color: var(--background);
+}
+
+.solid-theme.--radio-field-cont label {
+  border: var(--weight) solid var(--secondary);
+  border-radius: var(--radius);
+  -webkit-box-shadow: var(--solid-shadow);
+          box-shadow: var(--solid-shadow);
+  -webkit-transform: var(--unpressed-transform);
+          transform: var(--unpressed-transform);
+  font-family: sans-serif;
+}
+
+.solid-theme.--radio-field-cont label:focus, .solid-theme.--radio-field-cont label:hover {
+  background: var(--main);
+  color: var(--background);
+}
+
 .solid-theme.--account-action {
   border-bottom: var(--weight) solid var(--secondary);
 }
@@ -609,6 +638,7 @@ body {
 .radio-field-cont label {
   margin: 0 8px 0 0;
   cursor: pointer;
+  padding: 12px;
 }
 
 button[type="submit"] {
