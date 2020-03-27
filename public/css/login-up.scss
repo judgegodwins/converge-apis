@@ -1,13 +1,3 @@
-/*.input-field-cont input:focus{
-	padding: 10px 0 0 20px;
-	height: 70px;
-}*/
-/*button[type="submit"]:focus, button[type="submit"]:active{
-	transform: var(--pressed-transform);
-	box-shadow: var(--pressed-shadow);
-	border: var(--weight) solid var(--main);
-	color: var(--main);
-}*/
 
 * {
     padding: 0;
@@ -490,6 +480,7 @@ body {
 .form-container {
     width: 85%;
     overflow: hidden;
+    margin: 2em 0;
     display: grid;
     position: relative;
 
@@ -536,6 +527,7 @@ body {
     .form-container {
         display: grid;
         grid-template-columns: 1fr 1fr;
+        margin: 0;
 
         *{
             font-size: 18px;
@@ -609,11 +601,27 @@ body {
     width: 85%;
     margin: auto;
     position: relative;
+
+    > div{
+        margin: 0 0 18px 0;
+    }
 }
 
 .group-cont{
     display: inline-block;
     width: 100%;
+    margin: 12px 0;
+
+    > div{
+        margin: 0 0 18px 0;
+
+        &.radio-field-cont{
+            margin-bottom: 0;
+        }
+        &:nth-last-of-type(1){
+            margin: 0;
+        }
+    }
 
 }
 
@@ -641,7 +649,7 @@ body {
 .input-field-cont {
     height: 70px;
     width: 100%;
-    margin: 24px 0;
+    margin: 20px 0;
     position: relative;
 
     input {

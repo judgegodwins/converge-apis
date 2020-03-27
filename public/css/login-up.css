@@ -1,13 +1,3 @@
-/*.input-field-cont input:focus{
-	padding: 10px 0 0 20px;
-	height: 70px;
-}*/
-/*button[type="submit"]:focus, button[type="submit"]:active{
-	transform: var(--pressed-transform);
-	box-shadow: var(--pressed-shadow);
-	border: var(--weight) solid var(--main);
-	color: var(--main);
-}*/
 * {
   padding: 0;
   margin: 0;
@@ -521,6 +511,7 @@ body {
 .form-container {
   width: 85%;
   overflow: hidden;
+  margin: 2em 0;
   display: -ms-grid;
   display: grid;
   position: relative;
@@ -572,6 +563,7 @@ body {
     display: grid;
     -ms-grid-columns: 1fr 1fr;
         grid-template-columns: 1fr 1fr;
+    margin: 0;
   }
   .form-container * {
     font-size: 18px;
@@ -637,9 +629,26 @@ body {
   position: relative;
 }
 
+.form-content-cont > div {
+  margin: 0 0 18px 0;
+}
+
 .group-cont {
   display: inline-block;
   width: 100%;
+  margin: 12px 0;
+}
+
+.group-cont > div {
+  margin: 0 0 18px 0;
+}
+
+.group-cont > div.radio-field-cont {
+  margin-bottom: 0;
+}
+
+.group-cont > div:nth-last-of-type(1) {
+  margin: 0;
 }
 
 @media screen and (min-width: 769px) {
@@ -660,7 +669,7 @@ body {
 .input-field-cont {
   height: 70px;
   width: 100%;
-  margin: 24px 0;
+  margin: 20px 0;
   position: relative;
 }
 
