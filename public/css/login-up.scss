@@ -368,7 +368,31 @@ body {
         grid-column-start: 1;
         grid-row-start: 1;
     }
+
+    .slider-active{
+        width: 50%;
+        transform: translateX(100%);
+    }
+
+    .form-active{
+        transform: translateX(-100%);
+        opacity: 0;
+        z-index: -1;
+    }
+
+    // @keyframes account-slider {
+    //     0%{
+            
+    //     }
+    //     50%{
+    
+    //     }
+    //     100%{
+    
+    //     }
+    // }
 }
+
 
 .form-content-cont {
     width: 85%;

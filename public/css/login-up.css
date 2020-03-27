@@ -408,6 +408,17 @@ body {
     -ms-grid-row: 1;
         grid-row-start: 1;
   }
+  .slider-active {
+    width: 50%;
+    -webkit-transform: translateX(100%);
+            transform: translateX(100%);
+  }
+  .form-active {
+    -webkit-transform: translateX(-100%);
+            transform: translateX(-100%);
+    opacity: 0;
+    z-index: -1;
+  }
 }
 
 .form-content-cont {
