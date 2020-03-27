@@ -265,6 +265,11 @@
     box-shadow: 0px 0px 36px 2px hsla(210, 88%, 54%, 0.12);
     border: var(--weight) solid var(--main);
 
+    &.alt-btn{
+        border-color: var(--background);
+        color: var(--background);
+    }
+
     &:hover,
     &:focus {
         background: var(--main);

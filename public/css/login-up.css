@@ -282,6 +282,11 @@
   border: var(--weight) solid var(--main);
 }
 
+.material-theme--btn.alt-btn {
+  border-color: var(--background);
+  color: var(--background);
+}
+
 .material-theme--btn:hover, .material-theme--btn:focus {
   background: var(--main);
   color: var(--background);
