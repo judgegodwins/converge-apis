@@ -6,27 +6,27 @@ html(lang="en")
     title Login
     link(rel="stylesheet", href="./css/login-up.css")
   body
-    #main.neu-theme.--main
-      .form-container.neu-theme.--container
-        #slider.account-action.neu-theme.--account-action
+    #main.material-theme.--main
+      .form-container.material-theme.--container
+        #slider.account-action.material-theme.--account-action
           //- a(href="/create_account")
-          button#switch.action-btn.neu-theme.--btn.alt-btn
+          button#switch.action-btn.material-theme.--btn.alt-btn
             span Create an account.
 
         .form-wrapper  
           form#create-account.form-active(data-active="false", action="/create_account", method="POST")
             .form-content-cont
               .input-field-cont
-                input#null1.neu-theme.--input.username( type="text", name="username", autocomplete="off", required="required")
+                input#null1.material-theme.--input.username( type="text", name="username", autocomplete="off", required="required")
                 label(for="username")
                   span Username
               .group-cont
                 .input-field-cont
-                  input#firstname.neu-theme.--input(type="text", name="firstname", autocomplete="off", required="required")
+                  input#firstname.material-theme.--input(type="text", name="firstname", autocomplete="off", required="required")
                   label(for="firstname")
                     span First Name
                 .input-field-cont
-                  input#lastname.neu-theme.--input(type="text", name="lastname", autocomplete="off", required="required")
+                  input#lastname.material-theme.--input(type="text", name="lastname", autocomplete="off", required="required")
                   label(for="lastname")
                     span Last Name
               .group-cont
@@ -39,11 +39,11 @@ html(lang="en")
                   input#female(type="radio" name="gender" value="female") 
 
               .input-field-cont
-                input#null2.neu-theme.--input.password(type="password", name="password", autocomplete="new-password", required="required")
+                input#null2.material-theme.--input.password(type="password", name="password", autocomplete="new-password", required="required")
                 label(for="password")
                   span Password
 
-              button.action-btn.neu-theme.--btn(type="submit")
+              button.action-btn.material-theme.--btn(type="submit")
                 span Sign Up
 
 
@@ -51,14 +51,14 @@ html(lang="en")
           form#sign-in(data-active="true",action="/login", method="POST")
             .form-content-cont
               .input-field-cont
-                input#username.neu-theme.--input.username(data-active="true", type="text", name="username", autocomplete="off", required="required")
+                input#username.material-theme.--input.username(data-active="true", type="text", name="username", autocomplete="off", required="required")
                 label(for="username")
                   span Username
               .input-field-cont
-                input#password.neu-theme.--input.password(data-active="true", type="password", name="password", autocomplete="new-password", required="required")
+                input#password.material-theme.--input.password(data-active="true", type="password", name="password", autocomplete="new-password", required="required")
                 label(for="password")
                   span Password
-              button.action-btn.neu-theme.--btn(type="submit")
+              button.action-btn.material-theme.--btn(type="submit")
                 span Login
 
 

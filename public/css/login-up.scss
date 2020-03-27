@@ -91,7 +91,6 @@
     border-radius: var(--radius);
     box-shadow: var(--solid-shadow);
     transform: var(--unpressed-transform);
-    padding: 10px 0 0 20px;
     font-family: sans-serif;
     outline: none;
     background: none;
@@ -158,7 +157,6 @@
 .flat-theme.--input {
     border: none;
     border-radius: var(--radius);
-    padding: 10px 0 0 20px;
     font-family: sans-serif;
     outline: none;
     background: var(--flat-bg);
@@ -490,7 +488,7 @@ body {
     input {
         width: 100%;
         height: 100%;
-        padding: 10px 0 0 20px;
+        padding: 18px 0 0 18px;
         font-family: sans-serif;
         outline: none;
 
