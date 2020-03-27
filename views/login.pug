@@ -30,11 +30,13 @@ html(lang="en")
                   label(for="lastname")
                     span Last Name
               .group-cont
-                label(for="male") Male
-                input#male(type="radio" name="gender" value="male") 
-
-                label(for="female") Female
-                input#female(type="radio" name="gender" value="female") 
+                .radio-field-cont
+                  label(for="male") Male
+                  input#male(type="radio" name="gender" value="male") 
+                
+                .radio-field-cont
+                  label(for="female") Female
+                  input#female(type="radio" name="gender" value="female") 
 
               .input-field-cont
                 input#null2.solid-theme--input.password(type="password", name="password", autocomplete="new-password", required="required")
