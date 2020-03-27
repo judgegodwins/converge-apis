@@ -141,15 +141,13 @@ function socketConnection(io, Model) {
         // io.to(socket.id).emit('handle', handle)
         socket.on('new_message', (data) => {
 
-            let receiverSub, senderFullname;
+            let senderFullname;
 
             Model.findOne({username: socket.request.user.username}).select({password: 0}).exec((err, sender) => {
 
                 senderFullname = sender.first_name + ' ' + sender.last_name
 
                 Model.findOne({username: data.toUser}).select({password: 0}).exec((err, receiver) => {
-
-                    receiverSub = JSON.parse(receiver.pushSubscription);
 
                     let movingFriend = indexOfFriend(sender, receiver.username);
 
@@ -248,19 +246,21 @@ function socketConnection(io, Model) {
                         })
                     })
 
-                    console.log('receiver-sub just before payload: ', receiverSub, senderFullname)
+                    if(receiver.pushSubscription) {
 
-                    const payload = JSON.stringify({"title": senderFullname, "message": data.message });
-                    console.log(webPush.sendNotification);
-                    // console.log(webPushOptions)
-                    webPush.sendNotification(
-                        receiverSub,
-                        payload,
-                        webPushOptions
-                    )
-                    .catch(err => {
-                        console.error('push error: ', err);
-                    })
+                        const pushSubscription = JSON.parse(receiver.pushSubscription);
+
+                        const payload = JSON.stringify({"title": senderFullname, "message": data.message });
+
+                        webPush.sendNotification(
+                            pushSubscription,
+                            payload,
+                            webPushOptions
+                        )
+                        .catch(err => {
+                            console.error('push error: ', err);
+                        })
+                    }
 
                 })
 
