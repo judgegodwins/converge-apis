@@ -165,17 +165,17 @@ $(function() {
             let chatarea = document.querySelector('.chat-area');
             let msgDay = document.querySelector('.msg-day')
             if(parseDate(lastMsgTime).minusTime.trim() == 'today') {
-                if(!chatarea.contains(msgDay)) {
-                    chatarea.innerHTML = '<div class="msg-day">Today</div>' + chatArea.innerHTML;            
+                if(!chatArea.contains(msgDay)) {
+                    chatArea.innerHTML = '<div class="msg-day">Today</div>' + chatArea.innerHTML;            
                 }   
             } else {
-                chatarea.innerHTML = '<div class="msg-day">Today</div>' + chatArea.innerHTML;            
+                chatArea.innerHTML = '<div class="msg-day">Today</div>' + chatArea.innerHTML;            
 
             }
 
             // console.log(friendMessages);
 
-            chatarea.innerHTML = newMessage(msg, 'you-message', '') + chatArea.innerHTML;
+            chatArea.innerHTML = newMessage(msg, 'you-message', '') + chatArea.innerHTML;
             $('#message-box').val('');
         })
     }
