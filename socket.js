@@ -250,7 +250,7 @@ function socketConnection(io, Model) {
                         })
                     })
 
-                    if('pushSubscription' in receiver) {
+                    if(receiver.pushSubscription) {
 
                         const pushSubscription = JSON.parse(receiver.pushSubscription);
 
