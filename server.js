@@ -56,7 +56,7 @@ app.set('views', path.join(__dirname, 'views'))
 if(process.env.NODE_ENV === 'production') {
     app.use(function(req, res) {
         if(!req.secure) {
-            res.redirect('https://' + request.headers.host + req.url)
+            res.redirect('https://' + req.headers.host + req.url)
         }
     })
 }
