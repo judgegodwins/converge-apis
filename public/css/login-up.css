@@ -657,6 +657,9 @@ body {
     display: -ms-flexbox;
     display: flex;
   }
+  .group-cont > div {
+    margin: 0;
+  }
   .group-cont .input-field-cont {
     margin-right: 12px;
   }
