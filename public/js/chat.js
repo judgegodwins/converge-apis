@@ -162,20 +162,20 @@ $(function() {
             console.log('msgInd: ', msgInd)
 
             let lastMsgTime = msgInd[msgInd.length-1].time
-
+            let chatarea = document.querySelector('.chat-area');
             let msgDay = document.querySelector('.msg-day')
             if(parseDate(lastMsgTime).minusTime.trim() == 'today') {
-                if(!chatArea.contains(msgDay)) {
-                    chatArea.innerHTML = '<div class="msg-day">Today</div>' + chatArea.innerHTML;            
+                if(!chatarea.contains(msgDay)) {
+                    chatarea.innerHTML = '<div class="msg-day">Today</div>' + chatArea.innerHTML;            
                 }   
             } else {
-                chatArea.innerHTML = '<div class="msg-day">Today</div>' + chatArea.innerHTML;            
+                chatarea.innerHTML = '<div class="msg-day">Today</div>' + chatArea.innerHTML;            
 
             }
 
             // console.log(friendMessages);
 
-            chatArea.innerHTML = newMessage(msg, 'you-message', '') + chatArea.innerHTML;
+            chatarea.innerHTML = newMessage(msg, 'you-message', '') + chatArea.innerHTML;
             $('#message-box').val('');
         })
     }
