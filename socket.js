@@ -242,7 +242,11 @@ function socketConnection(io, Model) {
                         if(err) console.log(err);
                         receiver.save((err, d1) => {
                             if(err) console.log(err)
-                            socket.to(currentJoined).emit('new_msg', {username: socket.username, message: data.message})
+                            socket.to(currentJoined).emit('new_msg', {
+                                username: socket.username, 
+                                fullname: sender.first_name + ' ' + sender.last_name, 
+                                message: data.message
+                            })
                         })
                     })
 
