@@ -53,13 +53,13 @@ app.use(express.static(path.join(process.cwd(), 'public')))
 app.set('view engine', 'pug')
 app.set('views', path.join(__dirname, 'views'))
 
-if(process.env.NODE_ENV === 'production') {
-    app.use(function(req, res) {
-        if(!req.secure) {
-            res.redirect('https://' + req.headers.host + req.url)
-        }
-    })
-}
+// if(process.env.NODE_ENV === 'production') {
+//     app.use(function(req, res) {
+//         if(!req.secure) {
+//             res.redirect('https://' + req.headers.host + req.url)
+//         }
+//     })
+// }
 
 //push subscription
 
