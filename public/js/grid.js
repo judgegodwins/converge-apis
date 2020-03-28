@@ -30,7 +30,7 @@ export function friendClick() {
     
         mainArea.classList.remove('active-area');
         msgArea.classList.add('active-area');
-    
+        $('.search-box').removeClass('inactive')
     })
 } 
 

@@ -1,6 +1,22 @@
+const webPush = require('web-push');
+
+const publicVapidKey = 'BOrQPL1CeyjJNJydzDcDjUozdvYjJFCeZLPUgvtl3Bp33kgUFzd8lvuvs79hFdgpbSPjb9N_kTDq265juEbPGLk',
+      privateVapidKey = process.env.VAPID_KEY;
+
+const webPushOptions = {
+    gcmAPIKey: process.env.GCMAPIKEY,
+    TTL: 60,
+    vapidDetails: {
+        subject: 'mailto: judgegodwins@gmail.com',
+        publicKey: publicVapidKey,
+        privateKey: privateVapidKey
+    }
+}
 
 
 function socketConnection(io, Model) {
+    const payload = 'New Notification';
+
 
     const users = []
 
@@ -32,6 +48,7 @@ function socketConnection(io, Model) {
                 })
 
             } else {
+
                 callback(person.status, false);
             }
 
@@ -69,7 +86,6 @@ function socketConnection(io, Model) {
                 })
             })
 
-            console.log('socket.req.user: ', socket.request.user);
             users.splice(users.indexOf(users.filter((x) => {
                 return x.id === socket.id;
             })[0]), 1);
@@ -107,12 +123,30 @@ function socketConnection(io, Model) {
             }
         })
 
+        socket.on('read', (data) => {
+            console.log('user has read')
+            console.log(data.username, ' has read')
+            socket.to(currentJoined).emit('read', {username: data.username})
+        })
+
+        // socket.on('delivered', (data) => {
+        //     let target = users.find((x) => {
+        //         return x.name == data.otherUser;
+        //     }).id;
+        //     socket.join(target);
+        //     socket.to(target).emit('delivered', {username: data.receivingUser})
+        // })
+
 
         // io.to(socket.id).emit('handle', handle)
         socket.on('new_message', (data) => {
-            console.log(currentJoined)
-            console.log('received new message: ', data.message)
+
+            let senderFullname;
+
             Model.findOne({username: socket.request.user.username}).select({password: 0}).exec((err, sender) => {
+
+                senderFullname = sender.first_name + ' ' + sender.last_name
+
                 Model.findOne({username: data.toUser}).select({password: 0}).exec((err, receiver) => {
 
                     let movingFriend = indexOfFriend(sender, receiver.username);
@@ -130,15 +164,13 @@ function socketConnection(io, Model) {
                             time: new Date()
                         })
 
-                        console.log('sender username: ', sender.username);
-                        console.log('receiver friend: ', receiver.friends[receiver.friends.indexOf(indexOfFriend(receiver, sender.username))]);
+                        
                         receiver.friends[receiver.friends.indexOf(indexOfFriend(receiver, sender.username))].messages.push({
                             content: data.message,
                             type: 'received',
                             time: new Date()
                         })
                     } else {
-                        console.log('not yet in friend list, adding to friendlist');
                         sender.friends.push({
                             username: receiver.username,
                             first_name: receiver.first_name,
@@ -163,44 +195,50 @@ function socketConnection(io, Model) {
                             }]
                         })
 
-                        console.log('sender: ', sender)
-                        console.log('users array: ', users)
+
                         let user1 = users.filter((x) => {
                             return x.name == sender.username;
                         })[0].id,
                             user2;
                         try {
-                            user2= users.filter((x) => {
+                            user2 = users.filter((x) => {
                                 return x.name == receiver.username;
                             })[0].id;
+                            emitNewMsg(sender, user1, receiver);
+                            emitNewMsg(receiver, user2, sender);
                         } catch(err) {
-
+                            console.log(err);
+                            emitNewMsg(receiver, user2, sender);
                         }
                         
                         console.log('user1: ', user1);
 
                         console.log('user2: ', user2)
+
                         function emitNewMsg(user, userSocket, otherUser) {
+                            console.log('emitting new msgs', );
                             let userIndex = user.friends.find((x) => {
                                 return x.username === otherUser.username;
                             });
+                            console.log('socket: ', socket);
                             console.log('userIndex: ', userIndex);
+                            console.log('socket rooms: ', socket.rooms);
+
                             socket.join(userSocket);
+                            console.log('socket rooms after joining: ', socket.rooms);
                             socket.to(userSocket).emit('add_new_messages', {
                                 username: otherUser.username,
                                 messages: user.friends[user.friends.indexOf(userIndex)].messages
                             })
-                        }
 
-                        emitNewMsg(sender, user1, receiver);
-                        emitNewMsg(receiver, user2, sender);
+                        }
 
 
                     }
 
 
 
-                    sender.save((err, d1) => {
+                    sender.save((err, d) => {
                         if(err) console.log(err);
                         receiver.save((err, d1) => {
                             if(err) console.log(err)
@@ -208,9 +246,26 @@ function socketConnection(io, Model) {
                         })
                     })
 
+                    if(receiver.pushSubscription) {
+
+                        const pushSubscription = JSON.parse(receiver.pushSubscription);
+
+                        const payload = JSON.stringify({"title": senderFullname, "message": data.message });
+
+                        webPush.sendNotification(
+                            pushSubscription,
+                            payload,
+                            webPushOptions
+                        )
+                        .catch(err => {
+                            console.error('push error: ', err);
+                        })
+                    }
+
                 })
 
             })
+
         })
 
         // socket.on('save_message', (data) => {

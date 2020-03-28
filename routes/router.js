@@ -1,6 +1,7 @@
 const passport = require('passport');
 const bcrypt = require('bcryptjs');
 const areFriends = require('../socket').areFriends;
+
 module.exports = function(app, Model) {
     app.route('/login')
     .get((req, res) => {
@@ -21,7 +22,7 @@ module.exports = function(app, Model) {
                 return next(null, false);
             } else {
                 let user = new Model({
-                    username: req.body.username,
+                    username: req.body.username.toLowerCase(),
                     first_name: req.body.firstname,
                     last_name: req.body.lastname,
                     gender: req.body.gender,
@@ -135,7 +136,9 @@ module.exports = function(app, Model) {
         Model.find({}, (err, data) => {
             if(!err) res.send(data)
         })
+        console.log(req.user);
     })
+
     app.get('/friends', (req, res) => {
         res.render('friends_list', {friends: req.user.friends.filter((friend) => {
             return friend.friends_status === true;
@@ -174,9 +177,10 @@ module.exports = function(app, Model) {
         })
     })
 
-    app.get('/rem', (req, res) => {
-        Model.remove({}, (err, data) => {
-            if(!err) res.send('success')
-        })
-    })
+    // app.get('/rem', (req, res) => {
+    //     Model.remove({}, (err, data) => {
+    //         if(!err) res.send('success')
+    //     })
+    // })
+
 }

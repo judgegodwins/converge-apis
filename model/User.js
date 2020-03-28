@@ -62,6 +62,7 @@ var userSchema = new Schema({
     },
     lastSeen: Date,
     friends: [friendSchema],
+    pushSubscription: String
 })
 
 userSchema.plugin(uniqueArrayPlugin);
