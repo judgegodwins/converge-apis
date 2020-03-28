@@ -125,7 +125,7 @@ $(function() {
 
             socket.emit('new_message', {message: msg, toUser: friend, fullName: $('#header-username').html()});
             let msgInd;
-            if(friendMessages[friend]) {
+            if(friend in friendMessages) {
                 msgInd = friendMessages[friend].messages;
                 msgInd.push({content: msg, type: 'sent', time: new Date().toISOString()})
 
@@ -159,6 +159,8 @@ $(function() {
 
             console.log(msgInd);
             
+            console.log('msgInd: ', msgInd)
+
             let lastMsgTime = msgInd[msgInd.length-1].time
 
             let msgDay = document.querySelector('.msg-day')
@@ -268,6 +270,7 @@ $(function() {
         let friendUsername = this.dataset.username;
         socket.emit('join', {friend: friendUsername});
         submitCall(this.dataset.username);
+        console.log('dataset-username:', this.dataset.username)
         chatArea.innerHTML = '';
         // friendClick();
         let span = document.querySelector('#header-username');
