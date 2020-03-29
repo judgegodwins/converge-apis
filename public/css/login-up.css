@@ -281,6 +281,10 @@
   border: none;
 }
 
+.neu-theme.--btn.alt-btn span:hover, .neu-theme.--btn.alt-btn span:focus {
+  background: transparent;
+}
+
 .neu-theme.--btn.alt-btn:active {
   -webkit-box-shadow: var(--pressed-neu-shadow-soft-alt);
           box-shadow: var(--pressed-neu-shadow-soft-alt);
