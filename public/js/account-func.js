@@ -3,7 +3,10 @@ console.log("init");
 const accountSwitchBtn = document.querySelector("button#switch"),
     accountSlider = document.querySelector("#slider.account-action"),
     signIn_Form = document.querySelector("form#sign-in"),
-    createAccount_Form = document.querySelector("form#create-account");
+    createAccount_Form = document.querySelector("form#create-account"),
+    AccountContWrapper = document.querySelector(".cont-wrapper"),
+    signInTrigger = document.querySelector("button#sign-in"),
+    signUpTrigger = document.querySelector("button#sign-up");
 
 const signIn_Username = signIn_Form.querySelector("input.username"),
     signIn_Pass = signIn_Form.querySelector("input.password"),
@@ -17,7 +20,7 @@ function setAttributes(el, attributes){
     }
 }
 
-accountSwitchBtn.addEventListener("click", function(){
+function toggleAccountSwitch(){
     accountSlider.classList.toggle("slider-active");
     signIn_Form.classList.toggle("form-active");
     signIn_Form.parentElement.classList.toggle("wrapper-inactive");
@@ -46,4 +49,14 @@ accountSwitchBtn.addEventListener("click", function(){
 
         accountSwitchBtn.querySelector("span").textContent = "Create An Account";
     };
+}
+
+accountSwitchBtn.addEventListener("click", toggleAccountSwitch);
+signUpTrigger.addEventListener("click", function(){
+    toggleAccountSwitch();
+    AccountContWrapper.style.transform = "translateX(0%)";
+});
+signInTrigger.addEventListener("click", function(){
+    toggleAccountSwitch();
+    AccountContWrapper.style.transform = "translateX(-50%)";
 });
