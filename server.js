@@ -17,10 +17,14 @@ const webPush          = require('web-push');
 const app              = express();
 const PORT             = process.env.PORT || 5000;
 
-var server = https.createServer(app);
-
-if (process.env.NODE_ENV === 'production') {
-
+var server
+if(process.env.NODE_ENV == 'development') {
+    server       = https.createServer({
+        key: fs.readFileSync('server.key'),
+        cert: fs.readFileSync('server.cert')
+     }, app);
+} else if (process.env.NODE_ENV === 'production') {
+    server      = https.createServer(app);
     app.use(function(req, res) {
         if(!req.secure) {
             res.redirect('https://' + req.headers.host + req.url)
@@ -36,17 +40,23 @@ app.use(helmet());
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 
-app.use(session({
+var sess = {
     secret: process.env.SESSION_SECRET,
     store: sessionStore,
     resave: false,
     saveUninitialized: true,
     cookie: {
         path: '/',
-        httpOnly: false,
         maxAge: 1000 * 60 * 60 * 24 * 30
     }
-}));
+};
+
+if(app.get('env') === 'production') {
+    app.set('trust proxy', 1);
+    sess.cookie.secure = true;
+}
+
+app.use(session(sess));
 
 app.use(passport.initialize());
 
