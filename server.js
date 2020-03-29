@@ -17,16 +17,8 @@ const webPush          = require('web-push');
 const app              = express();
 const PORT             = process.env.PORT || 5000;
 
-var server = http.Server(app)
+const server           = http.Server(app)
 
-
-if (process.env.NODE_ENV === 'production') {
-    app.use(function(req, res) {
-        if(!req.secure) {
-            res.redirect('https://' + req.headers.host + req.url)
-        }
-    })
-}
 
 const io               = socketio(server);
 const sessionStore     = new FileStore();
