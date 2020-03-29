@@ -23,7 +23,8 @@
 .env
 backup.txt
 goals.txt
-t.txt
+server.key
+server.cert
 
 npm-debug.log*
 yarn-debug.log*
