@@ -270,6 +270,10 @@
         span{
             color: var(--background);
             border: none;
+
+            &:hover, &:focus{
+                background: transparent;
+            }
         }
         &:active{
             box-shadow: var(--pressed-neu-shadow-soft-alt);
