@@ -271,7 +271,6 @@ $(function() {
         let friendUsername = this.dataset.username;
 
         socket.emit('join', {friend: friendUsername});
-        socket.emit('new_message', {message: 'Yo bruv', toUser: friendUsername, fullName: $('#header-username').html()});        console.log('submitting to ', friendUsername)
         
         //important
         chatArea.innerHTML = '';
