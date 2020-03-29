@@ -23,7 +23,7 @@ module.exports = function(app, Model) {
             } else {
                 let user = new Model({
                     username: req.body.username.toLowerCase(),
-                    // email: req.body.email,
+                    email: req.body.email,
                     first_name: req.body.firstname,
                     last_name: req.body.lastname,
                     gender: req.body.gender,
@@ -122,7 +122,13 @@ module.exports = function(app, Model) {
         res.send('success')
     });
 
-    app.get('/logout', (req, res) => {
+    app.get('/logout', async (req, res) => {
+        await Model.findById(req.user._id, (err, user) => {
+            user.pushSubscription = '';
+            user.save((err, data) => {
+                if(err) console.log(err);
+            })
+        });
         req.logout();
         res.redirect('/login')
     });
