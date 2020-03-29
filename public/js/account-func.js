@@ -1,65 +1,49 @@
 console.log("init");
 
-var accountSwitchBtn = document.querySelector("button#switch"),
+const accountSwitchBtn = document.querySelector("button#switch"),
     accountSlider = document.querySelector("#slider.account-action"),
-    signInForm = document.querySelector("form#sign-in"),
-    createAccountForm = document.querySelector("form#create-account");
+    signIn_Form = document.querySelector("form#sign-in"),
+    createAccount_Form = document.querySelector("form#create-account");
 
+const signIn_Username = signIn_Form.querySelector("input.username"),
+    signIn_Pass = signIn_Form.querySelector("input.password"),
+    createAccount_Username = createAccount_Form.querySelector("input.username"),
+    createAccount_Pass = createAccount_Form.querySelector("input.password"),
+    createAccount_Email = createAccount_Form.querySelector("input.email");
 
-var signIn_Username = signInForm.querySelector("input.username");
-var signIn_Pass = signInForm.querySelector("input.password");
-var createAccount_Username = createAccountForm.querySelector("input.username");
-var createAccount_Pass = createAccountForm.querySelector("input.password");
-var createAccount_Email = createAccountForm.querySelector("input.email");
+function setAttributes(el, attributes){
+    for(i in attributes){
+        el.setAttribute(i, attributes[i]);
+    }
+}
 
 accountSwitchBtn.addEventListener("click", function(){
     accountSlider.classList.toggle("slider-active");
-    signInForm.classList.toggle("form-active");
-    signInForm.parentElement.classList.toggle("wrapper-inactive");
-    createAccountForm.classList.toggle("form-active");
-    createAccountForm.parentElement.classList.toggle("wrapper-inactive")
+    signIn_Form.classList.toggle("form-active");
+    signIn_Form.parentElement.classList.toggle("wrapper-inactive");
+    createAccount_Form.classList.toggle("form-active");
+    createAccount_Form.parentElement.classList.toggle("wrapper-inactive")
 
-    if(createAccountForm.getAttribute("data-active") == "false"){
-        createAccountForm.setAttribute("data-active", "true");
-        signInForm.setAttribute("data-active", "false");
+    if(createAccount_Form.getAttribute("data-active") == "false"){
+        setAttributes(createAccount_Form, {'data-active': 'true'});
+        setAttributes(signIn_Form, {'data-active': 'false'});
+        
+        setAttributes(signIn_Username, {'id':'null1', 'name': 'null1'});
+        setAttributes(signIn_Pass, {'id':'null2', 'name': 'null2'});
+        setAttributes(createAccount_Username, {'id': 'username', 'name': 'username'});
+        setAttributes(createAccount_Pass, {'id': 'password', 'name': 'password'});
+        
         accountSwitchBtn.querySelector("span").textContent = "Have an Account? Log in";
-        console.log("false => true");
-
-        signIn_Username.setAttribute("id", "null1");
-        signIn_Username.setAttribute("name", "null1");
-        signIn_Pass.setAttribute("id", "null2");
-        signIn_Pass.setAttribute("name", "null2");
-
-        createAccount_Username.setAttribute("id", "username");
-        createAccount_Pass.setAttribute("id", "password");
-        createAccount_Username.setAttribute("name", "username");
-        createAccount_Pass.setAttribute("name", "password");
-        createAccount_Email.setAttribute("id", "email")
 
     } else{
-        createAccountForm.setAttribute("data-active", "false");
-        signInForm.setAttribute("data-active", "true");
+        setAttributes(createAccount_Form, {'data-active': 'false'});
+        setAttributes(signIn_Form, {'data-active': 'true'});
+        
+        setAttributes(signIn_Username, {'id':'username', 'name': 'username'});
+        setAttributes(signIn_Pass, {'id':'password', 'name': 'password'});
+        setAttributes(createAccount_Username, {'id': 'null1', 'name': 'null1'});
+        setAttributes(createAccount_Pass, {'id': 'null2', 'name': 'null2'});
+
         accountSwitchBtn.querySelector("span").textContent = "Create An Account";
-        console.log("true => false")
-
-        signIn_Username.setAttribute("id", "username");
-        signIn_Username.setAttribute("name", "username");
-        signIn_Pass.setAttribute("id", "password");
-        signIn_Pass.setAttribute("name", "password");
-
-        createAccount_Username.setAttribute("id", "null1");
-        createAccount_Pass.setAttribute("id", "null2");
-        createAccount_Username.setAttribute("name", "null1");
-        createAccount_Pass.setAttribute("name", "null2");
-
-    }
-
-    //write a function that
-    //checks if ".slider-active" class is in the accountSlider element
-    //if true, listen for "transitionend" event and set the width to 50%
-    /*
-    accountSlider.getAttribute
-    */
-
-
-})
+    };
+});
