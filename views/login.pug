@@ -20,6 +20,12 @@ html(lang="en")
                 input#null1.solid-theme.--input.username( type="text", name="username", autocomplete="off", required="required")
                 label(for="username")
                   span Username
+
+              .input-field-cont
+                input#null1.solid-theme.--input.username( type="email", name="email", autocomplete="off", required="required")
+                label(for="email")
+                  span Email address
+
               .group-cont
                 .input-field-cont
                   input#firstname.solid-theme.--input(type="text", name="firstname", autocomplete="off", required="required")
@@ -55,7 +61,7 @@ html(lang="en")
               .input-field-cont
                 input#username.solid-theme.--input.username(data-active="true", type="text", name="username", autocomplete="off", required="required")
                 label(for="username")
-                  span Username
+                  span Username or email
               .input-field-cont
                 input#password.solid-theme.--input.password(data-active="true", type="password", name="password", autocomplete="new-password", required="required")
                 label(for="password")
