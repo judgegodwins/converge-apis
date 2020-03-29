@@ -405,6 +405,15 @@ body {
     justify-content: flex-start;
 }
 
+.msg-day {
+    display: flex;
+    justify-content: center;
+    margin: 0 auto 0 auto;
+    color: #444;
+    margin-bottom: 20px;
+}
+
+
 .search-box {
     position: absolute;
     right: 0;

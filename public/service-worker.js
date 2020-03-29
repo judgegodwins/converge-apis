@@ -24,7 +24,7 @@ self.addEventListener('notificationclick', event => {
 
 self.addEventListener('push', event => {
     const data = event.data.json();
-    console.log('yo gotti')
+
     const options = {
         body: data.message,
         icon: '/src/img/download.png',

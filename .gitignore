@@ -23,6 +23,7 @@
 .env
 backup.txt
 goals.txt
+t.txt
 
 npm-debug.log*
 yarn-debug.log*
