@@ -133,13 +133,6 @@ module.exports = function(app, Model) {
         })})
     })
 
-    // app.get('/all', (req, res) => {
-    //     Model.find({}, (err, data) => {
-    //         if(!err) res.send(data)
-    //     })
-    //     console.log(req.user);
-    // })
-
     app.get('/friends', (req, res) => {
         res.render('friends_list', {friends: req.user.friends.filter((friend) => {
             return friend.friends_status === true;

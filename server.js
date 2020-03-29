@@ -1,7 +1,8 @@
 require('dotenv').config();
 
 const express          = require('express');
-const http             = require('http');
+const https            = require('https');
+const fs               = require('fs')
 const path             = require('path');
 const helmet           = require('helmet');
 const bodyParser       = require('body-parser');
@@ -15,7 +16,22 @@ const webPush          = require('web-push');
 
 const app              = express();
 const PORT             = process.env.PORT || 5000;
-const server           = http.Server(app);
+
+var server
+if(process.env.NODE_ENV == 'development') {
+    server       = https.createServer({
+        key: fs.readFileSync('server.key'),
+        cert: fs.readFileSync('server.cert')
+     }, app);
+} else if (process.env.NODE_ENV === 'production') {
+    server      = https.createServer(app);
+    app.use(function(req, res) {
+        if(!req.secure) {
+            res.redirect('https://' + req.headers.host + req.url)
+        }
+    })
+}
+
 const io               = socketio(server);
 const sessionStore     = new FileStore();
 
@@ -53,13 +69,12 @@ app.use(express.static(path.join(process.cwd(), 'public')))
 app.set('view engine', 'pug')
 app.set('views', path.join(__dirname, 'views'))
 
-// if(process.env.NODE_ENV === 'production') {
-//     app.use(function(req, res) {
-//         if(!req.secure) {
-//             res.redirect('https://' + req.headers.host + req.url)
-//         }
-//     })
-// }
+    // app.use(function(req, res) {
+    //     if(!req.secure) {
+    //         res.redirect('https://' + req.headers.host + req.url)
+    //     }
+    // })
+
 
 //push subscription
 
@@ -71,6 +86,7 @@ app.post('/subscribepush', (req, res) => {
         user.pushSubscription = JSON.stringify(subscription);
         user.save((err, data) => {
             if(err) console.error(err);
+            res.send('success');
         })
     })
 })
@@ -89,7 +105,7 @@ mongoose.connect(process.env.DB, {useNewUrlParser: true, useUnifiedTopology: tru
     auth(app, User)
     routes(app, User);
     socket(io, User);
-    server.listen(PORT, ()=> console.log(`Server started on port ${PORT}`));
+    server.listen(PORT, () => console.log(`Server started on port ${PORT}`));
 })
 
 module.exports = {
