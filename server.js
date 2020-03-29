@@ -20,7 +20,7 @@ const PORT             = process.env.PORT || 5000;
 var server = https.createServer(app);
 
 if (process.env.NODE_ENV === 'production') {
-    
+
     app.use(function(req, res) {
         if(!req.secure) {
             res.redirect('https://' + req.headers.host + req.url)
@@ -43,7 +43,7 @@ app.use(session({
     saveUninitialized: true,
     cookie: {
         path: '/',
-        httpOnly: true,
+        httpOnly: false,
         maxAge: 1000 * 60 * 60 * 24 * 30
     }
 }));
