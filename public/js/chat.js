@@ -28,17 +28,8 @@ function getPermission() {
 
 $(function() {
 
-    var friendMessages = {
-        'john': {
-            activeStatus: null,
-            messages: [
-                {content: 'Hello', type: 'sent'},
-                {content: 'Hi bro', type: 'received'}
-            ]
-        }
-    
-    }
-    
+    var friendMessages = {}
+    var cacheMsgInBox = {};
     
     function newPerson(person) {
         let iconTrue
@@ -89,7 +80,9 @@ $(function() {
 
     var socket = io();
     var chatArea = document.querySelector('.chat-area')
-    var existMsg = chatArea.innerHTML
+    var existMsg = chatArea.innerHTML;
+    let submit = document.querySelector('.submit');
+    let messageBox = document.getElementById('message-box')
 
     var newMessage = (text, elclass, time) => {
         const now = new Date();
@@ -114,23 +107,29 @@ $(function() {
         return returnMsg;
     };
 
-    function submitCall(friend) {
+    function submitCall() {
         $('.submit').click(function(e) {
 
             e.preventDefault();
+
+            let friend = this.dataset.username;
 
             let msg = $('#message-box').val();
 
             if(msg == '') return;
 
+
             socket.emit('new_message', {message: msg, toUser: friend, fullName: $('#header-username').html()});
+
             let msgInd;
+
             if(friend in friendMessages) {
+                console.log(friend, ' in friendMessages')
                 msgInd = friendMessages[friend].messages;
                 msgInd.push({content: msg, type: 'sent', time: new Date().toISOString()})
 
                 var msgSpan = document.querySelectorAll('.msg-span');
-                console.log('message: ', msgSpan)
+
                 msgSpan.forEach((ms) => {
                     if(ms.dataset.username === friend) {
                         ms.innerHTML = msgInd[msgInd.length-1].content + 
@@ -150,28 +149,24 @@ $(function() {
                 msgInd = friendMessages[friend].messages
 
                 var msgDiv = document.querySelector('.messages-div');
-                console.log('friendMessages friend', friendMessages[friend])
-                console.log('friendMessages: ', friendMessages)
+ 
                 msgDiv.innerHTML = newPerson(friendMessages[friend]) + msgDiv.innerHTML
                 friendClick();
                 $('.message').click(messageClick);
             }
 
-            console.log(msgInd);
-            
-            console.log('msgInd: ', msgInd)
 
-            let lastMsgTime = msgInd[msgInd.length-1].time
-            let chatarea = document.querySelector('.chat-area');
-            let msgDay = document.querySelector('.msg-day')
-            if(parseDate(lastMsgTime).minusTime.trim() == 'today') {
-                if(!chatArea.contains(msgDay)) {
-                    chatArea.innerHTML = '<div class="msg-day">Today</div>' + chatArea.innerHTML;            
-                }   
-            } else {
-                chatArea.innerHTML = '<div class="msg-day">Today</div>' + chatArea.innerHTML;            
+            // let lastMsgTime = msgInd[msgInd.length-1].time
+            // let chatarea = document.querySelector('.chat-area');
+            // let msgDay = document.querySelector('.msg-day')
+            // if(parseDate(lastMsgTime).minusTime.trim() == 'today') {
+            //     if(!chatArea.contains(msgDay)) {
+            //         chatArea.innerHTML = '<div class="msg-day">Today</div>' + chatArea.innerHTML;            
+            //     }
+            // } else {
+            //     chatArea.innerHTML = '<div class="msg-day">Today</div>' + chatArea.innerHTML;            
 
-            }
+            // }
 
             // console.log(friendMessages);
 
@@ -186,10 +181,10 @@ $(function() {
     })
 
     socket.on('new_msg', function(data) {
-
+        const newMsgObj = {content: data.message, type: 'received', time: new Date().toISOString()};
         let u = document.getElementById('header-username');
         if(u.dataset.username == data.username) {
-            chatArea.innerHTML = newMessage(data.message, 'other-message', null) + chatArea.innerHTML;
+            chatArea.innerHTML = newMessage(data.message, 'other-message', parseDate(newMsgObj.time).hour) + chatArea.innerHTML;
             let mainArea = document.querySelector('.main-area');
             if(mainArea.classList.contains('active-area')) {
                 socket.emit('read', {username: $('.container').data('user')})
@@ -203,9 +198,9 @@ $(function() {
             friendMessages[data.username] = {
                 fullname: data.fullname,
                 username: data.username,
-                messages: [{content: data.message, type: 'received', time: new Date().toISOString()}]
+                messages: [newMsgObj]
             }
-
+            console.log('user not in friendmessages')
             let messageDiv = document.querySelector('.messages-div');
 
             messageDiv.innerHTML = newPerson(
@@ -216,8 +211,8 @@ $(function() {
             $('.message').click(messageClick);
         } else {
             var msgInd;
-            msgInd = friendMessages[data.username].messages
-            msgInd.push({content: data.message, type: 'received', time: new Date().toISOString()})
+            msgInd = friendMessages[data.username].messages;
+            msgInd.push(newMsgObj);
 
             var msgSpan = document.querySelectorAll('.msg-span');
             
@@ -264,19 +259,37 @@ $(function() {
     // getReadStatus('delivered')
 
 
+    messageBox.addEventListener('keyup', (e) => {
+
+        let username = messageBox.dataset.username;
+        cacheMsgInBox[username] = messageBox.value;
+
+    })
 
     function messageClick(e) {
         $('.search-box').addClass('inactive');
         let friendUsername = this.dataset.username;
-        socket.emit('join', {friend: friendUsername});
-        submitCall(this.dataset.username);
-        console.log('dataset-username:', this.dataset.username)
-        chatArea.innerHTML = '';
-        // friendClick();
-        let span = document.querySelector('#header-username');
-        span.dataset.username = this.dataset.username;
 
+        socket.emit('join', {friend: friendUsername});
+        socket.emit('new_message', {message: 'Yo bruv', toUser: friendUsername, fullName: $('#header-username').html()});        console.log('submitting to ', friendUsername)
+        
+        //important
+        chatArea.innerHTML = '';
+
+        let span = document.querySelector('#header-username');
+        span.dataset.username = friendUsername;
         document.cookie = `current_joined=${friendUsername}`
+
+
+        submit.dataset.username = friendUsername;
+        messageBox.dataset.username = friendUsername
+        if(friendUsername in cacheMsgInBox) {
+            messageBox.value = cacheMsgInBox[friendUsername]
+        } else {
+            messageBox.value = '';
+        }
+
+        submitCall();
 
         function bringStatus(username) {
             socket.emit('bring_status', {username: username}, (status, fromDb) => {
@@ -299,7 +312,7 @@ $(function() {
 
         socket.emit('read', {username: $('.container').data('user')});
 
-        if(friendMessages[friendUsername]) {
+        if(friendUsername in friendMessages) {
 
             if(friendMessages[friendUsername].activeStatus) {
 
@@ -313,7 +326,7 @@ $(function() {
             bringStatus(this.dataset.username);
         }
 
-        try {
+        if(friendUsername in friendMessages) {
             let dateOfMsg, at;
             friendMessages[friendUsername].messages.forEach((msg) => {
                 let elClass;
@@ -342,7 +355,6 @@ $(function() {
                     at = 'yesterday';
 
                 } else {
-                    console.log('minusTime: ', minusTime)
                     if(at != minusTime) {
 
                         chatArea.innerHTML = `<div class="msg-day">${minusTime}</div>` + chatArea.innerHTML;
@@ -350,21 +362,10 @@ $(function() {
                     }
                     at = minusTime;
                 }
-
-                let date = new Date(msg.time);
-
-
-                let dateArray = date.toString().split(' ');
-
-                let time = dateArray[4].substring(0, dateArray[4].lastIndexOf(':'));
-
-                console.log('i\'m here')
     
-                chatArea.innerHTML = newMessage(msg.content, elClass, time) + chatArea.innerHTML;
+                chatArea.innerHTML = newMessage(msg.content, elClass, parseDate(msg.time).hour) + chatArea.innerHTML;
     
             })
-        } catch (err) {
-
         }
 
         getPermission();
@@ -383,6 +384,7 @@ $(function() {
 
     socket.on('connected', (data) => {
         let ls;
+        console.log('connected: ', data.username, data.status)
         try {
             ls = friendMessages[data.username].activeStatus = `${data.status}`;
         } catch (err) {
@@ -480,10 +482,11 @@ function parseDate(d) {
         sub = `${dateArray[3]}`
         console.log(prefix)
     }
-    console.log('dateArray before time: ', dateArray  );
+
     const time = dateArray[4].substring(0, dateArray[4].lastIndexOf(':'));
     return ({
         prefixTime: `${prefix} ${time}`,
-        minusTime: `${prefix.substring(0, prefix.lastIndexOf('a'))} ${sub ? sub : ''}`
+        minusTime: `${prefix.substring(0, prefix.lastIndexOf('a'))} ${sub ? sub : ''}`,
+        hour: `${time}`
     })
 }

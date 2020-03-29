@@ -25,11 +25,17 @@ function socketConnection(io, Model) {
         console.log(socket.id)
 
         socket.username = socket.request.user.username;
-
-
-        // socket.id = socket.request.user.id;
         socket.status = 'online';
 
+        users.push({
+            name: socket.username,
+            id: socket.id,
+            status: socket.status
+        });
+
+        console.log('users: ', users)
+
+        // socket.id = socket.request.user.id;
 
         socket.broadcast.emit('connected', {
             username: socket.username,
@@ -57,11 +63,6 @@ function socketConnection(io, Model) {
         
         socket.broadcast.emit('online', {username: socket.request.user.username})
 
-        users.push({
-            name: socket.username,
-            id: socket.id,
-            status: socket.status
-        });
 
         // Model.findOne({username: socket.username}, (err, user) => {
         //     user.friends.forEach((friend) => {
@@ -96,31 +97,21 @@ function socketConnection(io, Model) {
 
         var currentJoined
         socket.on('join', (data) => {
-            for(let user of users) {
-                if(user.name == data.friend) {
-                    // console.log(true, user)
-                    socket.join(user.id);
+            let friend = users.find((user) => {
+                return user.name === data.friend;
+            });
 
-                    console.log('user_id: ', user.id);
-                    console.log('joining: ', user.name)
-                    currentJoined = user.id;
-                    
-
-                    //add this tommorrow
-                    
-                    // Model.findOne({username: socket.username}, (err, user) => {
-                    //     user.friends.forEach((friend) => {
-                    //         if(friend.username === data.friend) {
-                    //             friend.messages.forEach((msg) => {
-                    //                 if(msg.type === 'received' && msg.new) {
-                    //                     msg.new = false;
-                    //                 }
-                    //             })
-                    //         }
-                    //     })
-                    // })
-                }
+            if(friend) {
+                socket.join(friend.id);
+                currentJoined = friend.id;
+                console.log('joined friend')
+            } else {
+                currentJoined = null;
+                console.log('couldn\'t join')
             }
+
+            console.log('currentJoined on join: ', currentJoined);
+            console.log(users)
         })
 
         socket.on('read', (data) => {
@@ -143,6 +134,7 @@ function socketConnection(io, Model) {
 
             let senderFullname;
 
+            console.log('to: ', data.toUser)
             Model.findOne({username: socket.request.user.username}).select({password: 0}).exec((err, sender) => {
 
                 senderFullname = sender.first_name + ' ' + sender.last_name

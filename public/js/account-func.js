@@ -5,10 +5,12 @@ var accountSwitchBtn = document.querySelector("button#switch"),
     signInForm = document.querySelector("form#sign-in"),
     createAccountForm = document.querySelector("form#create-account");
 
+
 var signIn_Username = signInForm.querySelector("input.username");
 var signIn_Pass = signInForm.querySelector("input.password");
 var createAccount_Username = createAccountForm.querySelector("input.username");
 var createAccount_Pass = createAccountForm.querySelector("input.password");
+var createAccount_Email = createAccountForm.querySelector("input.email");
 
 accountSwitchBtn.addEventListener("click", function(){
     accountSlider.classList.toggle("slider-active");
@@ -32,6 +34,7 @@ accountSwitchBtn.addEventListener("click", function(){
         createAccount_Pass.setAttribute("id", "password");
         createAccount_Username.setAttribute("name", "username");
         createAccount_Pass.setAttribute("name", "password");
+        createAccount_Email.setAttribute("id", "email")
 
     } else{
         createAccountForm.setAttribute("data-active", "false");
