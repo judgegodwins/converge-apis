@@ -17,14 +17,10 @@ const webPush          = require('web-push');
 const app              = express();
 const PORT             = process.env.PORT || 5000;
 
-var server
-if(process.env.NODE_ENV == 'development') {
-    server       = https.createServer({
-        key: fs.readFileSync('server.key'),
-        cert: fs.readFileSync('server.cert')
-     }, app);
-} else if (process.env.NODE_ENV === 'production') {
-    server      = https.createServer(app);
+var server = https.createServer(app);
+
+if (process.env.NODE_ENV === 'production') {
+    
     app.use(function(req, res) {
         if(!req.secure) {
             res.redirect('https://' + req.headers.host + req.url)
@@ -68,12 +64,6 @@ io.use(passportSocketIo.authorize({
 app.use(express.static(path.join(process.cwd(), 'public')))
 app.set('view engine', 'pug')
 app.set('views', path.join(__dirname, 'views'))
-
-    // app.use(function(req, res) {
-    //     if(!req.secure) {
-    //         res.redirect('https://' + req.headers.host + req.url)
-    //     }
-    // })
 
 
 //push subscription
