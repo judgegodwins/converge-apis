@@ -1,7 +1,7 @@
 require('dotenv').config();
 
 const express          = require('express');
-const https            = require('https');
+const http              = require('http');
 const fs               = require('fs')
 const path             = require('path');
 const helmet           = require('helmet');
@@ -17,14 +17,10 @@ const webPush          = require('web-push');
 const app              = express();
 const PORT             = process.env.PORT || 5000;
 
-var server
-if(process.env.NODE_ENV == 'development') {
-    server       = https.createServer({
-        key: fs.readFileSync('server.key'),
-        cert: fs.readFileSync('server.cert')
-     }, app);
-} else if (process.env.NODE_ENV === 'production') {
-    server      = https.createServer(app);
+var server = http.Server(app)
+
+
+if (process.env.NODE_ENV === 'production') {
     app.use(function(req, res) {
         if(!req.secure) {
             res.redirect('https://' + req.headers.host + req.url)
