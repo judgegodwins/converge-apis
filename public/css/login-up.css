@@ -665,10 +665,10 @@ body {
     margin: 0;
   }
   .group-cont .input-field-cont {
-    margin-right: 12px;
+    margin-right: 18px;
   }
   .group-cont .input-field-cont:nth-last-child(1) {
-    margin-left: 12px;
+    margin-left: 0px;
     margin-right: 0px;
   }
 }
@@ -738,7 +738,7 @@ body {
 }
 
 .radio-field-cont label {
-  margin: 0 8px 0 0;
+  margin: 0 18px 0 0;
   cursor: pointer;
   padding: 12px;
 }
