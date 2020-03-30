@@ -489,7 +489,7 @@ body {
     position: relative;
 
     * , *::before, *::after{
-        transition: all 0.12s ease;
+        transition: all 0.18s ease;
         font-size: 14px;
     }
 
@@ -583,6 +583,8 @@ body {
     }
     .cont-wrapper{
         position: relative;
+        transition: all 0.22s ease;
+
         .sign-in-cont{
             transform: translate(0,0) scale(1);
             position: relative;
@@ -660,15 +662,15 @@ body {
                     position: relative;
                 }    
     
-                h1, p, button{
+                h1, p{
                     color: var(--background);
                     margin: 12px 12px;
                 }
                 h1{
                     font-size: 38px;
                 }
-                p{
-                    color: var(--background);
+                button{
+                    margin: 12px 12px;
                 }
             }
         }

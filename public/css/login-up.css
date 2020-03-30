@@ -522,8 +522,8 @@ body {
 }
 
 .form-container *, .form-container *::before, .form-container *::after {
-  -webkit-transition: all 0.12s ease;
-  transition: all 0.12s ease;
+  -webkit-transition: all 0.18s ease;
+  transition: all 0.18s ease;
   font-size: 14px;
 }
 
@@ -621,6 +621,8 @@ body {
 
 .account-action .cont-wrapper {
   position: relative;
+  -webkit-transition: all 0.22s ease;
+  transition: all 0.22s ease;
 }
 
 .account-action .cont-wrapper .sign-in-cont {
@@ -721,15 +723,15 @@ body {
             transform: translate(0, 0) scale(1);
     position: relative;
   }
-  .account-action .cont-wrapper .sign-up-cont h1, .account-action .cont-wrapper .sign-up-cont p, .account-action .cont-wrapper .sign-up-cont button, .account-action .cont-wrapper .sign-in-cont h1, .account-action .cont-wrapper .sign-in-cont p, .account-action .cont-wrapper .sign-in-cont button {
+  .account-action .cont-wrapper .sign-up-cont h1, .account-action .cont-wrapper .sign-up-cont p, .account-action .cont-wrapper .sign-in-cont h1, .account-action .cont-wrapper .sign-in-cont p {
     color: var(--background);
     margin: 12px 12px;
   }
   .account-action .cont-wrapper .sign-up-cont h1, .account-action .cont-wrapper .sign-in-cont h1 {
     font-size: 38px;
   }
-  .account-action .cont-wrapper .sign-up-cont p, .account-action .cont-wrapper .sign-in-cont p {
-    color: var(--background);
+  .account-action .cont-wrapper .sign-up-cont button, .account-action .cont-wrapper .sign-in-cont button {
+    margin: 12px 12px;
   }
   .slider-active {
     width: 50%;
