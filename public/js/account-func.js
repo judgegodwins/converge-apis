@@ -5,8 +5,10 @@ const accountSwitchBtn = document.querySelector("button#switch"),
     signIn_Form = document.querySelector("form#sign-in"),
     createAccount_Form = document.querySelector("form#create-account"),
     AccountContWrapper = document.querySelector(".cont-wrapper"),
-    signInTrigger = document.querySelector("button#sign-in"),
-    signUpTrigger = document.querySelector("button#sign-up");
+    slider_signInCont = accountSlider.querySelector(".sign-in-cont"),
+    slider_signUpCont = accountSlider.querySelector(".sign-up-cont"),
+    signInTrigger = accountSlider.querySelector("button#sign-in"),
+    signUpTrigger = accountSlider.querySelector("button#sign-up");
 
 const signIn_Username = signIn_Form.querySelector("input.username"),
     signIn_Pass = signIn_Form.querySelector("input.password"),
@@ -25,7 +27,10 @@ function toggleAccountSwitch(){
     signIn_Form.classList.toggle("form-active");
     signIn_Form.parentElement.classList.toggle("wrapper-inactive");
     createAccount_Form.classList.toggle("form-active");
-    createAccount_Form.parentElement.classList.toggle("wrapper-inactive")
+    createAccount_Form.parentElement.classList.toggle("wrapper-inactive");
+    accountSlider.classList.toggle("active-slide");
+    // slider_signInCont.classList.toggle("active-acc-cont");
+    // slider_signUpCont.classList.toggle("active-acc-cont");
 
     if(createAccount_Form.getAttribute("data-active") == "false"){
         setAttributes(createAccount_Form, {'data-active': 'true'});
@@ -54,9 +59,7 @@ function toggleAccountSwitch(){
 accountSwitchBtn.addEventListener("click", toggleAccountSwitch);
 signUpTrigger.addEventListener("click", function(){
     toggleAccountSwitch();
-    AccountContWrapper.style.transform = "translateX(0%)";
 });
 signInTrigger.addEventListener("click", function(){
     toggleAccountSwitch();
-    AccountContWrapper.style.transform = "translateX(-50%)";
 });
