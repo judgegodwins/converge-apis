@@ -15,7 +15,7 @@ const cookieParser     = require('cookie-parser');
 const webPush          = require('web-push');
 
 const app              = express();
-const PORT             = process.env.PORT || 5000;
+const PORT             = process.env.PORT || 8080;
 
 const server           = http.Server(app)
 
@@ -32,17 +32,12 @@ var sess = {
     secret: process.env.SESSION_SECRET,
     store: sessionStore,
     resave: false,
-    saveUninitialized: true,
+    saveUninitialized: false,
     cookie: {
         path: '/',
         maxAge: 1000 * 60 * 60 * 24 * 30
     }
 };
-
-if(app.get('env') === 'production') {
-    app.set('trust proxy', 1);
-    sess.cookie.secure = true;
-}
 
 app.use(session(sess));
 
@@ -77,6 +72,10 @@ app.post('/subscribepush', (req, res) => {
             res.send('success');
         })
     })
+})
+
+app.get('/test', (req, res) => {
+    res.render('test')
 })
 
 

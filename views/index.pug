@@ -10,7 +10,12 @@ html
 
     body
         .container(data-user=`${user}`)
-          .messages-area.active-area
+          .account-actions.child
+              .main.children
+                h1 Hey
+              .inactive-closer.children
+                
+          .messages-area.child
               .top
                 .actions
                 .actions-mobile
@@ -38,7 +43,7 @@ html
               .search-div.inactive-left
                   
 
-          .main-area
+          .main-area.child
               .chat-header
                 .back
                     i.fas.fa-arrow-left

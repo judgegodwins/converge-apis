@@ -4,13 +4,18 @@ export function friendClick() {
     var msgArea = document.querySelector('.messages-area');
     var mainArea = document.querySelector('.main-area')
     var backBtn = document.querySelector('.back')
-
+    var accountArea = document.querySelector('.account-actions')
+    var menu = document.querySelector('.menu');
+    var inactiveCloser = document.querySelector('.inactive-closer');
 
     persons.forEach((person) => {
         person.addEventListener('click', function(e) {
-    
-            msgArea.classList.remove('active-area')
-            mainArea.classList.add('active-area');
+
+            let username = this.dataset.username;
+
+            window.history.pushState({username}, username, `/messages/${username}`);
+
+            mainArea.style.right = 0;
     
             console.log(this.childNodes)
     
@@ -23,15 +28,38 @@ export function friendClick() {
 
             headerImg.src = this.dataset.img
 
+            backBtn.addEventListener('click', back);
+
         })
     })
     
-    backBtn.addEventListener('click', function(e) {
-    
-        mainArea.classList.remove('active-area');
-        msgArea.classList.add('active-area');
+    function moveback(e) {
+        if(mainArea.style.right != '-100%') {
+            mainArea.style.right = '-100%';
+        }
+    }
+
+    window.addEventListener('popstate', moveback)
+
+    let clicks = 0
+
+    function back(e) {
+        e.preventDefault();
+        backBtn.removeEventListener('click', back);
+        window.history.go(-1);
+        
         $('.search-box').removeClass('inactive')
+    }
+
+    menu.addEventListener('click', (e) => {
+        accountArea.classList.add('open')
     })
+
+    inactiveCloser.addEventListener('click', (e) => {
+        console.log('clicked inCloser')
+        accountArea.classList.remove('open')
+    });
+
 } 
 
 var more = document.getElementById("more"), 

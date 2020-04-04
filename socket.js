@@ -95,6 +95,10 @@ function socketConnection(io, Model) {
         });
 
 
+        socket.on('backbutton', (data) => {
+            console.log('backbutton clicked');
+        })
+
         var currentJoined
         socket.on('join', (data) => {
             let friend = users.find((user) => {

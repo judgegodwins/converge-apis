@@ -25,6 +25,10 @@ backup.txt
 goals.txt
 server.key
 server.cert
+/views/test.pug
+/public/css/test.css
+/public/css/test.js
+
 
 npm-debug.log*
 yarn-debug.log*

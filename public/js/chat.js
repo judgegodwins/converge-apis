@@ -48,11 +48,11 @@ $(function() {
                          <span id="username">${person.fullname ? person.fullname : person.first_name + ' ' + person.last_name}</span>
                      </div>
                      <div class="msg-content">
-                         <span class="msg-span" data-username="${person.username}">${friendMessages[person.username] ? friendMessages[person.username].messages[friendMessages[person.username].messages.length-1].content : '@' + person.username}
-                         <span class="read-status" style="font-size: lighter;">
-                         ${iconTrue}
+                        <span class="read-status" style="font-size: 10px;">
+                            ${iconTrue}
                         </span>
-                         </span>
+                        <span class="msg-span" data-username="${person.username}">${friendMessages[person.username] ? friendMessages[person.username].messages[friendMessages[person.username].messages.length-1].content : '@' + person.username}
+                        </span>
                      </div>
                  </div>
              </div>
@@ -282,6 +282,7 @@ $(function() {
 
         submit.dataset.username = friendUsername;
         messageBox.dataset.username = friendUsername
+        
         if(friendUsername in cacheMsgInBox) {
             messageBox.value = cacheMsgInBox[friendUsername]
         } else {
@@ -462,19 +463,20 @@ function parseDate(d) {
     let date = new Date(d);
     let currentDate = new Date();
     let prefix = '', sub = '';
+    const dayDiff = 86400000
 
     let dateArray = date.toString().split(' ');
 
-    let dateDiff = currentDate.getDate() - date.getDate()
-    if(dateDiff === 0) {
+    let dateDiff = currentDate - date;
+    if(dateDiff < dayDiff) {
         prefix = 'today at'
-    } else if(dateDiff === 1) {
+    } else if(dateDiff >= dayDiff  && dateDiff < (dayDiff * 2)) {
         prefix = 'yesterday at'
-    } else if(dateDiff >= 1 && dateDiff < 7) {
+    } else if(dateDiff >= (dayDiff * 2) && dateDiff < (dayDiff * 7)) {
 
         prefix = dateArray[0] + ' at'
         sub = `${dateArray[1]} ${dateArray[2]} ${dateArray[3]}` 
-    } else if (dateDiff >= 7){
+    } else if (dateDiff >= (dayDiff * 7)){
 
         prefix = dateArray[1] + ' ' + dateArray[2] + ' at';
         console.log('prefix: ', prefix);

@@ -86,6 +86,11 @@ module.exports = function(app, Model) {
         })
     });
 
+
+    app.get('/test', (req, res) => {
+        res.render('test');
+    })
+
     app.get('/friend_request/:ind', async (req, res) => {
         const username = req.params.ind;
         console.log('add: ', username);
@@ -133,6 +138,7 @@ module.exports = function(app, Model) {
         res.redirect('/login')
     });
 
+
     app.get('/requests', (req, res) => {
         res.render('requests', {requests: req.user.friends.filter((friend) => {
             return friend.friends_status === false;
@@ -144,6 +150,12 @@ module.exports = function(app, Model) {
             return friend.friends_status === true;
         })});
     })
+
+    app.get('/messages/:username', (req, res) => {
+        console.log('param: ', req.params.username);
+        res.redirect('/');
+    })
+
     app
     .route('/messages')
     .get(ensureAuthenticated, (req, res) => {
