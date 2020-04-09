@@ -309,6 +309,9 @@ body {
     display: none;
     transition: all 0.12s ease-in;
     width: max-content;
+
+    transform: translateX(-105%);
+    left: 100%;
 }
 
 .show{

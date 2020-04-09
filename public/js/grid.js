@@ -71,7 +71,7 @@ var showDropDown = function(e, el){
     var x = e.target.getBoundingClientRect().x,
         y = e.target.getBoundingClientRect().y; 
     el.style.top = y + "px";   
-    el.style.left = x + "px";   
+    // el.style.left = x + "px";   
 };
 var hideDropDown = function(e, el){
     if(e.target !== more){
