@@ -37,7 +37,7 @@ export default class Controller {
         this.profileInput.addEventListener('change', function(e) {
             
             e.preventDefault();
-            
+
             const formData = new FormData();
             formData.append('avatar', this.profileInput.files[0]);
 
@@ -148,7 +148,7 @@ export default class Controller {
         if(e.target !== more){
             // console.log(e.target);
             el.classList.remove("show");
-        }    
+        }  
     }
     
 }

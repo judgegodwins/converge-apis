@@ -141,9 +141,7 @@ module.exports = function(app, Model) {
     })
 
     app.get('/profile', (req, res) => {
-        res.render('profile', {
-            fullname: req.user.first_name + ' ' + req.user.last_name
-        });
+        res.redirect('/');
     });
 
     app.get('/search', (req, res) => {
