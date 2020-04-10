@@ -1,4 +1,5 @@
-import {friendClick} from './grid.js'
+import Controller from './controller.js';
+
 
 // function setCookie(cookie) {
 //     var cookies = document.cookie;
@@ -30,6 +31,7 @@ $(function() {
 
     var friendMessages = {}
     var cacheMsgInBox = {};
+    var controller = new Controller();
     
     function newPerson(person) {
         let iconTrue
@@ -39,9 +41,9 @@ $(function() {
             iconTrue = ''
         }
         return `
-             <div class="message" data-img="/src/img/download.png" data-username="${person.username}">
+             <div class="message" data-img="${person.profile_img ? person.profile_img : '/src/img/download.png'}" data-username="${person.username}">
                  <div class="image-div">
-                     <img class="friend-avatar" src="/src/img/download.png" alt="image of friend" srcset="" />
+                     <img class="friend-avatar" src="${person.profile_img ? person.profile_img : '/src/img/download.png'}" alt="image of friend" srcset="" />
                  </div>
                  <div class="msg-text-name">
                      <div class="friend-name">
@@ -68,15 +70,14 @@ $(function() {
             var obj = Object.keys(data);
             friendMessages = data;
             obj.forEach((key, i) => {
-                console.log('key: ', key);
                 friendMessages[key].activeStatus = null
                 $('.messages-div').append(newPerson(friendMessages[key]));
             })
-            friendClick();
-            console.log('friendmessages from fetch: ', friendMessages)
-            $('.message').click(messageClick)
+            controller.updatePersons();
+            controller.callClick();
+            $('.message').click(messageClick);
         });
-    friendClick();
+
 
     var socket = io();
     var chatArea = document.querySelector('.chat-area')
@@ -150,8 +151,10 @@ $(function() {
 
                 var msgDiv = document.querySelector('.messages-div');
  
-                msgDiv.innerHTML = newPerson(friendMessages[friend]) + msgDiv.innerHTML
-                friendClick();
+                msgDiv.innerHTML = newPerson(friendMessages[friend]) + msgDiv.innerHTML;
+
+                controller.updatePersons();
+                controller.callClick();
                 $('.message').click(messageClick);
             }
 
@@ -200,14 +203,17 @@ $(function() {
                 username: data.username,
                 messages: [newMsgObj]
             }
-            console.log('user not in friendmessages')
+            
             let messageDiv = document.querySelector('.messages-div');
 
             messageDiv.innerHTML = newPerson(
                 friendMessages[data.username]
             ) + messageDiv.innerHTML;
             
-            friendClick();  
+            // update controllers record of message elements
+            // and add click events to them whilst removing the old event.
+            controller.updatePersons();
+            controller.msgClick();
             $('.message').click(messageClick);
         } else {
             var msgInd;
@@ -217,8 +223,7 @@ $(function() {
             var msgSpan = document.querySelectorAll('.msg-span');
             
             msgSpan.forEach((ms) => {
-                console.log('message span', ms);
-                console.log(ms.dataset.username)
+                
                 if(ms.dataset.username === data.username) {
                     console.log('msgSpan: ', ms);
                     ms.innerHTML = msgInd[msgInd.length-1].content
@@ -293,14 +298,11 @@ $(function() {
 
         function bringStatus(username) {
             socket.emit('bring_status', {username: username}, (status, fromDb) => {
-                console.log('bringing status')
-                console.log('status: ', status)
                 if(status != 'online') {
                     let lastSeen = `last seen ${parseDate(status).prefixTime}`
                     $('#lastseen').html(lastSeen);
                     try {
                         friendMessages[friendUsername].activeStatus = lastSeen;
-                        console.log('lastSeen FriendMessages: ', friendMessages)
                     } catch(err) {
                         return;
                     }
@@ -372,8 +374,6 @@ $(function() {
         
 
     }
-    $('.message').click(messageClick);
-
 
     socket.on('online', (friend) => {
         var t = document.cookie;
@@ -434,7 +434,8 @@ $(function() {
                     $('.search-div').append(newPerson(person))
                 })
 
-                friendClick();
+                controller.updatePersons();
+                controller.callClick();
                 $('.message').click(messageClick);
             })
     })
@@ -479,9 +480,7 @@ function parseDate(d) {
     } else if (dateDiff >= (dayDiff * 7)){
 
         prefix = dateArray[1] + ' ' + dateArray[2] + ' at';
-        console.log('prefix: ', prefix);
         sub = `${dateArray[3]}`
-        console.log(prefix)
     }
 
     const time = dateArray[4].substring(0, dateArray[4].lastIndexOf(':'));

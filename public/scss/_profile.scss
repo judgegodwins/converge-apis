@@ -1,0 +1,73 @@
+
+.you-profile {
+    @include leftHiddenDiv(4);
+    background: #fff;
+
+    & > .actions-mobile {
+        grid-template-columns: auto 1fr;
+        color: #fff;
+        background: $themecolor;
+        .action-header {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            color: #fff;
+        }
+        .action {
+            color: #fff;
+        }
+    }
+
+    .body {
+        height: calc(100% - 60px);
+
+        .details {
+            width: 100%;
+            height: 90px;
+            display: flex;
+
+            .name {
+                flex-grow: 1;
+                padding: 10px 20px 10px 10px;
+            }
+
+        }
+
+        .profile-actions {
+            height: 50vh;
+            width: 100%;
+
+            hr {
+                margin: 0 !important;
+                margin-inline-start: 0 !important;
+                margin-inline-end: 0 !important;
+            }
+
+            &>.action-list {
+                padding-inline-start: 0;
+                list-style-type: none;
+
+                .p-action {
+                    width: 100%;
+                    height: 40px;
+                    display: flex;
+                    align-items: center;
+
+                    & > form > input[type="file"] {
+                        display: none
+                    }
+
+                    & > label {
+                        width: 100%;
+                    }
+
+                    &:active {
+                        background: #eee;
+                    }
+                }
+
+            }
+        }
+    }
+    
+}

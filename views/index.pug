@@ -3,30 +3,39 @@ html
     head
         meta(charset='UTF-8')
         meta(name='viewport' content='width=device-width, initial-scale=1.0')
+        meta(name="theme-color" content="hsl(267, 86%, 40%)")
+        meta(name="msapplication-navbutton-color" content="#607d8b")
         title Converge
         script(src='https://kit.fontawesome.com/02c2434f59.js' crossorigin='anonymous')
         link(rel="manifest" href="manifest.json")
         link(rel='stylesheet' href='/css/grid.css')
-
+        link(rel="stylesheet", href="/css/slider.css")
     body
         .container(data-user=`${user}`)
           .account-actions.child
               .main.children
-                h1 Hey
+                .profile-details.settings
+                    .img-div
+                        .img-cover
+                            img.profile-img-det(src=`${photo_url}`, alt="", srcset="")
+                    .name
+                        h5 #{fullname}
               .inactive-closer.children
                 
           .messages-area.child
               .top
                 .actions
+                    .img-cover.p-img-desktop
+                        img.profile-img-det(src="/src/img/download.png", alt="profile image")
                 .actions-mobile
-                  .menu.actions-action
-                    i.fas.fa-bars
                   .app-name
                     span Converge
                   .search-box
                     input.search-txt(type="text", placeholder="Search")
                     a(href="#").search-btn
                       i.fas.fa-search
+                  .menu.actions-action
+                    i.fas.fa-bars    
                 .search-container
                     input.search-txt.desktop(type='text' placeholder='Search')
                     
@@ -71,6 +80,27 @@ html
                     input#message-box(name='' placeholder='Type a message')
                 .send-div.form-action.submit
                     i.fas.fa-paper-plane.form-icon
+          .you-profile.child
+            .actions-mobile
+              .action.back2
+                i.fas.fa-arrow-left
+              .action-header
+                span
+                  |Settings
+            .body
+              .details
+                .img-div.pxr-2
+                  .img-cover
+                    img.profile-img-det(src=`${photo_url}`, alt="", srcset="")
+                .name
+                   h4 #{fullname}
+              .profile-actions.px-2
+                ul.action-list
+                  li.p-action
+                    form.update-img(action="/updateprofile", method="POST" enctype="multipart/form-data")
+                      input(type="file" name="avatar" id="file" accept=".jpg,.jpeg,.png")
+                      label(for="file") Upload Photo
+                  hr
         
         #dropdown
           ul
@@ -85,7 +115,6 @@ html
           
         script(src="/socket.io/socket.io.js")
         script(src="/js/jquery-3.4.1.min.js")
-        script(src='/js/grid.js' type="module")
         script(src="/js/chat.js" type="module")
         script(src="/js/search.js" type="module")
         script(src="/js/ui.js")

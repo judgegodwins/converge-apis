@@ -1,0 +1,49 @@
+$paddings: (1, 2, 3, 4);
+
+@each $val in $paddings {
+    .p-#{$val} {
+        padding: #{$val * 10}px;
+    }
+    .py-#{$val} {
+        padding: #{$val * 10}px 0;
+    }
+    
+    .px-#{$val} {
+        padding: 0 #{$val * 10}px;
+    }
+    .pxr-#{$val} {
+        padding-left: #{$val * 10}px;
+    }
+}
+
+// @mixin padClass($valtop, $valright, $valbottom, $valleft) {
+//     padding: $valtop $valright $valbottom $valleft;
+// }
+
+
+.right-open {
+    right: 0 !important;
+}
+
+.actions-mobile.comeout{
+    display: grid;
+}
+
+.img-div {
+    width: 80px;
+    height: 80px;
+    display: flex;
+    align-items: center;
+}
+
+.img-cover {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+
+    & > .profile-img-det {
+        width: inherit;
+        height: inherit;
+        border-radius: 50%;
+    }
+}

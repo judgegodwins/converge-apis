@@ -1,0 +1,14 @@
+$themecolor: hsl(267, 86%, 40%);
+
+@mixin fillParent() {
+    width: 100%;
+    height: 60px;
+}
+
+@mixin leftHiddenDiv($zindex) {
+    position: relative;
+    right: -100%;
+    transition: 0.12s ease-out;
+    z-index: $zindex;
+}
+

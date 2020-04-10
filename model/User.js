@@ -31,6 +31,7 @@ var friendSchema = new Schema({
     },
     friends_status: Boolean,
     lastSeen: Date,
+    profile_photo: String,
     messages: [MessageSchema]
 })
 
@@ -66,7 +67,9 @@ var userSchema = new Schema({
     },
     lastSeen: Date,
     friends: [friendSchema],
-    pushSubscription: String
+    pushSubscription: String,
+    profile_photo_url: String,
+    old_photo_url: String
 })
 
 userSchema.plugin(uniqueArrayPlugin);
