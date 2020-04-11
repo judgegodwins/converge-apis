@@ -83,6 +83,9 @@
   .chat-header i, .chat-header span {
     color: #fff;
   }
+  .chat-header #header-username {
+    font-weight: 600;
+  }
   .actions {
     display: none;
   }

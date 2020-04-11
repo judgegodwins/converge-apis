@@ -35,11 +35,18 @@
         background-color: $themecolor;
         color: #fff;
         padding: 10px 16px 10px 0;
+
+        & i, & span {
+            color: #fff;
+        }
+
+        & #header-username {
+            font-weight: 600;
+        }
     }
 
-    .chat-header i, .chat-header span {
-        color: #fff
-    }
+
+    
 
     .actions {
         display: none;

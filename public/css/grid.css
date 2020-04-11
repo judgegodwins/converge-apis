@@ -229,6 +229,10 @@ body {
   overflow: hidden;
 }
 
+#username {
+  font-weight: 600;
+}
+
 .msg-text-name .msg-content {
   padding: 0 3px;
   padding-right: 15px;
@@ -863,6 +867,9 @@ input.search-txt::placeholder, input.search-txt:-ms-input-placeholder {
   }
   .chat-header i, .chat-header span {
     color: #fff;
+  }
+  .chat-header #header-username {
+    font-weight: 600;
   }
   .actions {
     display: none;
