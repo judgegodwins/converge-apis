@@ -9,29 +9,60 @@ export default class Controller {
         this.accountArea = document.querySelector('.account-actions');
         this.menu = document.querySelector('.menu');
         this.inactiveCloser = document.querySelector('.inactive-closer');
+        //user profile
         this.profile = document.querySelector('.you-profile');
         this.settings = document.querySelector('.settings');
+
+        //back button in userprofile page
         this.setBack = document.querySelector('.back2');
+
+        //back button in friend profile page. This should tale user back to messages
+        this.msgBack = document.querySelector('.back3');
+        //user's profile image
         this.profileImg = document.querySelectorAll('.profile-img-det');
+
+        //profile image for friend
+        this.profileImgFrnd = document.querySelector('.profile-img-friend');
         this.profileInput = document.querySelector('#file');
         this.form = document.querySelector('.update-img');
+        this.frndFullname = document.querySelector('.f-fullname')
+        this.mainHeader = document.querySelector('.main-header');
+        this.friendProfile = document.querySelector('.friend-profile');
+        // send message button in profile page
+        this.sm = document.querySelector('.s-m')
+        this.more = document.getElementById("more");
+        this.dropdown = document.getElementById("dropdown");
+        this.container = document.querySelector(".container");
         this.msgTarget = '';
         this.callClick = this.callClick.bind(this);
         this.updatePersons = this.updatePersons.bind(this);
         this.moveback = this.moveback.bind(this);
         this.openSettings = this.openSettings.bind(this);
-        this.more = document.getElementById("more");
-        this.dropdown = document.getElementById("dropdown");
-        this.container = document.querySelector(".container");
-
 
         window.addEventListener('popstate', this.moveback)
         
-
+        // open menu
         this.menu.addEventListener('click', (e) => {
             this.accountArea.classList.add('open')
         });
 
+        //open friend profile page
+
+        this.mainHeader.addEventListener('click', (e) => {
+            this.openProfile(
+                $('#header-username').html(),
+                $('#lastseen').html(),
+                $('#header-username').data('username'),
+                this.friendProfile,
+                this.msgBack,
+                $('.header-img').attr('src'),
+                this.profileImgFrnd,
+                this.frndFullname,
+                this.back
+            )
+        })
+
+        //open settings page
         this.settings.addEventListener('click', this.openSettings);
 
         this.profileInput.addEventListener('change', function(e) {
@@ -90,7 +121,7 @@ export default class Controller {
 
         let username = target.dataset.username;
 
-        window.history.pushState({username}, username, `/messages/${username}`);
+        window.history.pushState({username}, username, `/rd/messages/${username}`);
 
         mainArea.classList.add('right-open');
 
@@ -107,14 +138,17 @@ export default class Controller {
     }
 
     moveback(e) {
+        
+        var rightPoppers = [this.mainArea, this.profile];
 
-        if(this.mainArea.classList.contains('right-open')) {
-
-            this.mainArea.classList.remove('right-open');
-
-        } else if(this.profile.classList.contains('right-open')) {
-
-            this.profile.classList.remove('right-open');
+        if(this.friendProfile.classList.contains('right-open')) {
+            this.friendProfile.classList.remove('right-open');
+        } else {
+            rightPoppers.forEach(popper => {
+                if(popper.classList.contains('right-open')) {
+                    popper.classList.remove('right-open');
+                }
+            })
         }
     }
 
@@ -128,12 +162,28 @@ export default class Controller {
     }
 
     openSettings(e) {
-        window.history.pushState({profile: 'my-profile'}, 'Profile', '/profile');
+        // url should always contain 3 params to be able to redirect to
+        // homepage on reload.
+        window.history.pushState({profile: 'my-profile'}, 'Profile', '/rd/profile/me');
 
         this.profile.classList.add('right-open');
         this.accountArea.classList.remove('open')
 
         this.setBack.addEventListener('click', this.back);
+    }
+
+ 
+    openProfile(fullname, lastseen, username, profile, setBack, img, imgTarget, frndfullname, back) {
+        console.log('opening profile')
+        window.history.pushState({profile: 'my-profile'}, 'Profile', `/rd/profile/${username}`);
+
+        imgTarget.src = img;
+        profile.classList.add('right-open');
+
+        frndfullname.innerText = fullname;
+
+        this.sm.addEventListener('click', back);
+        setBack.addEventListener('click', back);
     }
 
     showDropDown(e, el) {

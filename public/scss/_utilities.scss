@@ -41,7 +41,7 @@ $paddings: (1, 2, 3, 4);
     height: 60px;
     border-radius: 50%;
 
-    & > .profile-img-det {
+    & > .profile-img-det, .profile-img-friend {
         width: inherit;
         height: inherit;
         border-radius: 50%;

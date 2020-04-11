@@ -48,6 +48,11 @@ module.exports = function(app, Model) {
         res.redirect('/');
     })
 
+    app.get('/rd/:any/:any', (req, res) => {
+        console.log('rd')
+        res.redirect('/');
+    })
+
     app.post('/updateprofile', upload.single('avatar'), (req, res) => {
         console.log('updating profile')
         Model.findById(req.user._id, (err, user) => {
@@ -233,11 +238,6 @@ module.exports = function(app, Model) {
         res.render('friends_list', {friends: req.user.friends.filter((friend) => {
             return friend.friends_status === true;
         })});
-    })
-
-    app.get('/messages/:username', (req, res) => {
-        console.log('param: ', req.params.username);
-        res.redirect('/');
     })
 
     app.get('/all', (req, res) => {

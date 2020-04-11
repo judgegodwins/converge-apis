@@ -80,7 +80,7 @@ html
                     input#message-box(name='' placeholder='Type a message')
                 .send-div.form-action.submit
                     i.fas.fa-paper-plane.form-icon
-          .you-profile.child
+          .profile.you-profile.child
             .actions-mobile
               .action.back2
                 i.fas.fa-arrow-left
@@ -101,7 +101,26 @@ html
                       input(type="file" name="avatar" id="file" accept=".jpg,.jpeg,.png")
                       label(for="file") Upload Photo
                   hr
-        
+          .profile.friend-profile.child 
+             .actions-mobile
+              .action.back3
+                i.fas.fa-arrow-left
+              .action-header
+                span.profile-name
+                  |Contact Info
+             .body
+              .details
+                .img-div.pxr-2
+                  .img-cover
+                    img.profile-img-friend(src="null", alt="", srcset="")
+                .name
+                   h4.f-fullname
+              .profile-actions.px-2
+                ul.action-list
+                  li.p-action.s-m
+                     |Send message
+                  hr
+
         #dropdown
           ul
             li View Contact
@@ -116,7 +135,4 @@ html
         script(src="/socket.io/socket.io.js")
         script(src="/js/jquery-3.4.1.min.js")
         script(src="/js/chat.js" type="module")
-        script(src="/js/search.js" type="module")
-        script(src="/js/ui.js")
-        script(src="/js/notifications.js" type="module")
         script(src="/js/main.js")
