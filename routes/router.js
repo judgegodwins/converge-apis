@@ -63,7 +63,7 @@ module.exports = function(app, Model) {
         
                     console.log('**', image.public_id);
                     user.old_photo_url = user.profile_photo_url;
-                    user.profile_photo_url = image.url;
+                    user.profile_photo_url = image.secure_url;
                     console.log('uploading stream')
                     user.save((err, data) => {
                         if(err) return console.warn(err);
