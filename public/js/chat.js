@@ -402,7 +402,6 @@ $(function() {
     socket.on('disconnected', (data) => {
         try {
             let ls = friendMessages[data.username].activeStatus = `last seen ${parseDate(data.time).prefixTime}`
-            console.log(friendMessages);
             $('#lastseen').html(ls);
         } catch (err) {
             if($('#header-username').data('username') == data.username) {
@@ -471,7 +470,7 @@ function parseDate(d) {
     let dateDiff = currentDate - date;
     
     if(dateDiff < dayDiff) {
-        if(currentDate.getDate() - date.getDate() === 1) {
+        if(currentDate.getDate() - date.getDate() == 1) {
             prefix = 'yesterday at';
         } else {
             prefix = 'today at'

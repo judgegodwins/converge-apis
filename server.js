@@ -8,31 +8,36 @@ const helmet           = require('helmet');
 const bodyParser       = require('body-parser');
 const socketio         = require('socket.io');
 const session          = require('express-session');
-const FileStore        = require('session-file-store')(session);
+const MongoStore       = require('connect-mongo')(session);
 const passport         = require('passport');
 const passportSocketIo = require('passport.socketio');
 const cookieParser     = require('cookie-parser');
 const webPush          = require('web-push');
+const mongoose         = require('mongoose');
 
 const app              = express();
 const PORT             = process.env.PORT || 8080;
 
 const server           = http.Server(app)
 
-
 const io               = socketio(server);
-const sessionStore     = new FileStore();
-
 
 app.use(helmet());
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
+
+
+
+const sessionStore = new MongoStore({
+    mongooseConnection: mongoose.connection
+});
 
 var sess = {
     secret: process.env.SESSION_SECRET,
     store: sessionStore,
     resave: false,
     saveUninitialized: false,
+    httpOnly: false,
     cookie: {
         path: '/',
         maxAge: 1000 * 60 * 60 * 24 * 30
@@ -52,7 +57,6 @@ io.use(passportSocketIo.authorize({
     passport: passport,
     cookieParser: cookieParser
 }))
-
 
 app.use(express.static(path.join(process.cwd(), 'public')))
 app.set('view engine', 'pug')
@@ -79,8 +83,6 @@ app.get('/test', (req, res) => {
 })
 
 
-const mongoose = require('mongoose');
-
 const routes = require('./routes/router');
 const auth = require('./auth');
 const socket = require('./socket').socketConnection;
@@ -89,6 +91,7 @@ const User = require('./model/User');
 
 mongoose.connect(process.env.DB, {useNewUrlParser: true, useUnifiedTopology: true }, (err, db) => {
     console.log('connected');
+
     auth(app, User)
     routes(app, User);
     socket(io, User);
