@@ -32,7 +32,7 @@ $(function() {
     var friendMessages = {}
     var cacheMsgInBox = {};
     var controller = new Controller();
-    
+    controller.imgListener();
     function newPerson(person) {
         let iconTrue
         if(friendMessages[person.username] && friendMessages[person.username].messages[friendMessages[person.username].messages.length-1].type == 'sent') {
@@ -469,8 +469,13 @@ function parseDate(d) {
     let dateArray = date.toString().split(' ');
 
     let dateDiff = currentDate - date;
+    
     if(dateDiff < dayDiff) {
-        prefix = 'today at'
+        if(currentDate.getDate() - date.getDate() === 1) {
+            prefix = 'yesterday at';
+        } else {
+            prefix = 'today at'
+        }
     } else if(dateDiff >= dayDiff  && dateDiff < (dayDiff * 2)) {
         prefix = 'yesterday at'
     } else if(dateDiff >= (dayDiff * 2) && dateDiff < (dayDiff * 7)) {

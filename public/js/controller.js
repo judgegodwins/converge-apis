@@ -19,10 +19,15 @@ export default class Controller {
         //back button in friend profile page. This should tale user back to messages
         this.msgBack = document.querySelector('.back3');
         //user's profile image
-        this.profileImg = document.querySelectorAll('.profile-img-det');
+        this.profileImg = document.querySelectorAll('.profile-img-dimg-det');
 
         //profile image for friend
         this.profileImgFrnd = document.querySelector('.profile-img-friend');
+        
+        //profile images of both user and friend
+        this.profileImgs = document.querySelectorAll('.profile-img');
+        this.imgDiv = document.querySelectorAll('.img-div.action');
+        this.imgCover = document.querySelectorAll('.img-cover');
         this.profileInput = document.querySelector('#file');
         this.form = document.querySelector('.update-img');
         this.frndFullname = document.querySelector('.f-fullname')
@@ -141,12 +146,30 @@ export default class Controller {
         
         var rightPoppers = [this.mainArea, this.profile];
 
+        var check = (prof) => {
+            // if .img-div or .img-cover is in fullscreen
+            let div = prof.children[1].children[0].children[0];
+
+            if(div.classList.contains('full')) {
+                div.classList.remove('full');
+                div.firstElementChild.classList.remove('full');
+            } else {
+                prof.classList.remove('right-open');
+            }
+        }
+
         if(this.friendProfile.classList.contains('right-open')) {
-            this.friendProfile.classList.remove('right-open');
+
+            check(this.friendProfile);
+
         } else {
             rightPoppers.forEach(popper => {
                 if(popper.classList.contains('right-open')) {
-                    popper.classList.remove('right-open');
+                    if(popper == this.profile) {
+                        check(this.profile);
+                    } else {
+                        popper.classList.remove('right-open');
+                    }
                 }
             })
         }
@@ -184,6 +207,18 @@ export default class Controller {
 
         this.sm.addEventListener('click', back);
         setBack.addEventListener('click', back);
+    }
+
+    imgListener() {
+        this.imgDiv.forEach(div => {
+            div.addEventListener('click', (e) => {
+                window.history.pushState({img: 'img'}, 'Profile Image', '/rd/profile/img')
+                div.classList.add('full');
+                
+                //i.e .img-cover
+                div.firstElementChild.classList.add('full');
+            })
+        })
     }
 
     showDropDown(e, el) {
