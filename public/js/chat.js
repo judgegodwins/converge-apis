@@ -75,7 +75,6 @@ $(function() {
                 friendMessages[key].activeStatus = null
                 let messages = friendMessages[key].messages;
                 lastMsg[key] = messages[messages.length-1].time;
-                console.log('friendy: ', friendMessages);
                 
             })
 
@@ -138,24 +137,23 @@ $(function() {
         $('.submit').click(function(e) {
 
             var msgDiv = document.querySelector('.messages-div');
+            var header = document.querySelector('#header-username');
 
             e.preventDefault();
 
             socket.emit('stop_typing', {username: $('.container').data('user')});
 
             let friend = this.dataset.username;
-
             let msg = $('#message-box').val();
 
             if(msg == '') return;
 
 
-            socket.emit('new_message', {message: msg, toUser: friend, fullName: $('#header-username').html()});
+            socket.emit('new_message', {message: msg, toUser: friend, fullName: header.innerHTML});
 
             let msgInd;
 
             if(friend in friendMessages) {
-                console.log(friend, ' in friendMessages')
                 msgInd = friendMessages[friend].messages;
                 msgInd.push({content: msg, type: 'sent', time: new Date().toISOString()})
 
@@ -172,7 +170,7 @@ $(function() {
             } else {
                 
                 friendMessages[friend] = {
-                    fullname: $('#header-username').html(),
+                    fullname: header.innerHTML,
                     username: friend,
                     messages: [{content: msg, type: 'sent', time: new Date().toISOString()}]
                 }
@@ -201,9 +199,10 @@ $(function() {
 
             chatArea.innerHTML = newMessage(msg, 'you-message', '') + chatArea.innerHTML;
             messageBox.value = '';
-            console.log(msgDiv)
             
-            msgDiv.innerHTML = moveMsgUp($('#header-username').data('username'));
+            cacheMsgInBox[header.dataset.username] = ''
+            msgDiv.innerHTML = moveMsgUp(header.dataset.username);
+
             controller.updatePersons();
             controller.callClick();
             $('.message').unbind('click', messageClick);
@@ -314,8 +313,7 @@ $(function() {
     function typing(username, box) {
         const current = box.value;
         setTimeout(() => {
-            console.log('current: ', current);
-            console.log('box value after 1.5s: ', box.value)
+
             if(current == box.value) {
                 socket.emit('stop_typing', {username: username});
             }
