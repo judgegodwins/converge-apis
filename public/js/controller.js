@@ -181,7 +181,7 @@ export default class Controller {
         e.target.removeEventListener('click', this.back);
         window.history.go(-1);
         
-        $('.search-box').removeClass('inactive');
+        // $('.search-box').removeClass('inactive');
     }
 
     openSettings(e) {

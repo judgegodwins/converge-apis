@@ -124,6 +124,14 @@ function socketConnection(io, Model) {
             socket.to(currentJoined).emit('read', {username: data.username})
         })
 
+        socket.on('typing', data => {
+            
+            socket.to(currentJoined).emit('typing', {username: data.username})
+        })
+        
+        socket.on('stop_typing', data => {
+            socket.to(currentJoined).emit('stop_typing', {username: data.username})
+        })
         // socket.on('delivered', (data) => {
         //     let target = users.find((x) => {
         //         return x.name == data.otherUser;
@@ -294,12 +302,6 @@ function socketConnection(io, Model) {
                     console.log(user.id, ' -> ', socket.id)
                 }
             })
-        })
-        socket.on('typing', (data) => {
-            socket.broadcast.emit('typing', {username: socket.username});
-        })
-        socket.on('stop_typing', (data) => {
-            socket.broadcast.emit('stop_typing')
         })
 
     })

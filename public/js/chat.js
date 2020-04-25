@@ -33,6 +33,8 @@ $(function() {
     var cacheMsgInBox = {};
     var controller = new Controller();
     controller.imgListener();
+    var msgDiv = document.querySelector('.messages-div')
+
     function newPerson(person) {
         let iconTrue
         if(friendMessages[person.username] && friendMessages[person.username].messages[friendMessages[person.username].messages.length-1].type == 'sent') {
@@ -64,18 +66,42 @@ $(function() {
 
     fetch('/messages?username=*')
         .then(res => {return res.json()})
-        .then((data) =>{
-            console.log('data: ', data)
-            console.log('bring friendMessages: ', friendMessages)
+        .then((data) => {
+            
             var obj = Object.keys(data);
+            var lastMsg = {}
             friendMessages = data;
             obj.forEach((key, i) => {
                 friendMessages[key].activeStatus = null
-                $('.messages-div').append(newPerson(friendMessages[key]));
+                let messages = friendMessages[key].messages;
+                lastMsg[key] = messages[messages.length-1].time;
+                console.log('friendy: ', friendMessages);
+                
+            })
+
+
+            let times = Object.values(lastMsg);
+            let names = Object.keys(lastMsg);
+            let sortedTimes = times.sort().reverse();
+            let sortedNames = []
+
+            for(let i = 0; i < sortedTimes.length; i++) {
+                // for(let j = 0; j < sortedTimes.length; j++) {
+                //     if(lastMsg[names[i]] == sortedTimes[j]) {
+
+                //     }
+                // }
+                sortedNames.push(names.find(name => {
+                    return lastMsg[name] === sortedTimes[i]
+                }));
+            }
+            sortedNames.forEach(name => {
+                msgDiv.innerHTML += 
+                `<div class="divisor no-display"></div>${newPerson(friendMessages[name])}`;
             })
             controller.updatePersons();
             controller.callClick();
-            $('.message').click(messageClick);
+            $('.message').bind('click', messageClick);
         });
 
 
@@ -111,7 +137,11 @@ $(function() {
     function submitCall() {
         $('.submit').click(function(e) {
 
+            var msgDiv = document.querySelector('.messages-div');
+
             e.preventDefault();
+
+            socket.emit('stop_typing', {username: $('.container').data('user')});
 
             let friend = this.dataset.username;
 
@@ -149,13 +179,9 @@ $(function() {
 
                 msgInd = friendMessages[friend].messages
 
-                var msgDiv = document.querySelector('.messages-div');
  
-                msgDiv.innerHTML = newPerson(friendMessages[friend]) + msgDiv.innerHTML;
+                // msgDiv.innerHTML = newPerson(friendMessages[friend]) + msgDiv.innerHTML;
 
-                controller.updatePersons();
-                controller.callClick();
-                $('.message').click(messageClick);
             }
 
 
@@ -174,7 +200,14 @@ $(function() {
             // console.log(friendMessages);
 
             chatArea.innerHTML = newMessage(msg, 'you-message', '') + chatArea.innerHTML;
-            $('#message-box').val('');
+            messageBox.value = '';
+            console.log(msgDiv)
+            
+            msgDiv.innerHTML = moveMsgUp($('#header-username').data('username'));
+            controller.updatePersons();
+            controller.callClick();
+            $('.message').unbind('click', messageClick);
+            $('.message').bind('click', messageClick);
         })
     }
 
@@ -182,6 +215,21 @@ $(function() {
     socket.on('add_new_messages', (data) => {
         console.log('add_new_messages data: ', data);
     })
+
+    function moveMsgUp(username) {
+        let msgDiv = document.querySelector('.messages-div');
+        let divisor = '<div class="divisor no-display"></div>';
+        var messages = msgDiv.innerHTML.split(divisor)
+        if(messages[0] === '') messages.splice(0, 1);
+
+        messages.forEach((msg, i) => {
+            messages[i] = messages[i].trim();
+            if(msg.includes(username) && i != 0) {
+                messages.unshift(messages.splice(i, 1)[0]);
+            }
+        })
+        return messages.join(divisor);
+    }
 
     socket.on('new_msg', function(data) {
         const newMsgObj = {content: data.message, type: 'received', time: new Date().toISOString()};
@@ -210,11 +258,7 @@ $(function() {
                 friendMessages[data.username]
             ) + messageDiv.innerHTML;
             
-            // update controllers record of message elements
-            // and add click events to them whilst removing the old event.
-            controller.updatePersons();
-            controller.msgClick();
-            $('.message').click(messageClick);
+
         } else {
             var msgInd;
             msgInd = friendMessages[data.username].messages;
@@ -230,7 +274,12 @@ $(function() {
                 }
             })
         }
-
+        console.log('moveup on msg: ', moveMsgUp(data.username));
+        msgDiv.innerHTML = moveMsgUp(data.username);
+        controller.updatePersons();
+        controller.callClick();
+        $('.message').unbind('click', messageClick);
+        $('.message').bind('click', messageClick);
 
         socket.emit('save_message', {message: data.message, username: data.username})
 
@@ -262,17 +311,68 @@ $(function() {
 
     // getReadStatus('read');
     // getReadStatus('delivered')
+    function typing(username, box) {
+        const current = box.value;
+        setTimeout(() => {
+            console.log('current: ', current);
+            console.log('box value after 1.5s: ', box.value)
+            if(current == box.value) {
+                socket.emit('stop_typing', {username: username});
+            }
+        }, 1500);
+    }
 
 
-    messageBox.addEventListener('keyup', (e) => {
+    messageBox.addEventListener('keyup', function(e) {
 
         let username = messageBox.dataset.username;
+
         cacheMsgInBox[username] = messageBox.value;
 
+        typing($('.container').data('user'), this);
+    })
+
+    messageBox.addEventListener('keydown', function(e) {
+        socket.emit('typing', {username: $('.container').data('user')});
+    })
+
+    socket.on('typing', data => {
+        if($('#header-username').data('username') == data.username) {
+            $('#lastseen').html('typing..');    
+        }
+        let msgSpan = document.querySelectorAll('.msg-span');
+        let readStatus = document.querySelectorAll('.read-status');
+
+        msgSpan.forEach((span, i) => {
+            if(span.dataset.username == data.username) {
+                span.innerText = 'typing...'
+                span.classList.add('typing-color')
+                readStatus[i].classList.add('no-display');
+            }
+        });
+        
+    })
+    socket.on('stop_typing', data => {
+        
+        if($('#header-username').data('username') == data.username) {
+            $('#lastseen').html(friendMessages[data.username].activeStatus);
+        }
+
+        let msgSpan = document.querySelectorAll('.msg-span');
+        let readStatus = document.querySelectorAll('.read-status');
+        let messages = friendMessages[data.username].messages;
+
+        msgSpan.forEach((span, i) => {
+            if(span.dataset.username == data.username) {
+                span.innerText = messages[messages.length-1].content;
+                span.classList.remove('typing-color')
+                readStatus[i].classList.remove('no-display');
+            }
+        });
     })
 
     function messageClick(e) {
-        $('.search-box').addClass('inactive');
+
         let friendUsername = this.dataset.username;
 
         socket.emit('join', {friend: friendUsername});
@@ -307,7 +407,12 @@ $(function() {
                         return;
                     }
                 } else {
-                    $('#lastseen').html(status) 
+                    $('#lastseen').html(status);
+                    try {
+                        friendMessages[friendUsername].activeStatus = status;
+                    } catch(err) {
+                        return;
+                    }
                 }
             });
         }
@@ -435,7 +540,7 @@ $(function() {
 
                 controller.updatePersons();
                 controller.callClick();
-                $('.message').click(messageClick);
+                $('.message').bind('click', messageClick);
             })
     })
 

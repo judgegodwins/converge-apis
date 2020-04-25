@@ -32,14 +32,21 @@
 
 .account-actions.open {
   left: 0;
+  -webkit-transition: 0.5s;
   transition: 0.5s;
 }
 
 @media (max-width: 760px) {
   .account-actions {
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
-    flex-direction: row;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: row;
+            flex-direction: row;
     left: -100%;
+    -webkit-transition: 0.5s ease-out;
     transition: 0.5s ease-out;
     z-index: 4;
   }
@@ -62,6 +69,7 @@
   .main-area {
     position: relative;
     right: -100%;
+    -webkit-transition: 0.12s ease-out;
     transition: 0.12s ease-out;
     z-index: 3;
   }
@@ -83,33 +91,54 @@
     color: #5d0ebe;
     background: none;
     outline: none;
-    justify-content: flex-end;
+    -webkit-box-pack: end;
+        -ms-flex-pack: end;
+            justify-content: flex-end;
   }
   .chat-header {
-    grid-template-columns: auto auto 3fr auto;
+    -ms-grid-columns: auto auto 3fr auto;
+        grid-template-columns: auto auto 3fr auto;
   }
   .back {
+    display: -webkit-inline-box;
+    display: -ms-inline-flexbox;
     display: inline-flex;
-    justify-content: center;
-    align-items: center;
+    -webkit-box-pack: center;
+        -ms-flex-pack: center;
+            justify-content: center;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
     width: 30px;
     /* border-radius: 50%; */
     z-index: 3;
     background: inherit;
   }
   .messages-area {
-    grid-template-rows: 60px calc(100% - 60px);
+    -ms-grid-rows: 60px calc(100% - 60px);
+        grid-template-rows: 60px calc(100% - 60px);
   }
   .messages-area .top {
-    grid-template-rows: 100%;
+    -ms-grid-rows: 100%;
+        grid-template-rows: 100%;
     border-right: none;
   }
   .search-container {
     display: none;
   }
   .actions-mobile {
+    display: -ms-grid;
     display: grid;
     background: #5d0ebe;
+  }
+  input.search-txt.active::-webkit-input-placeholder {
+    color: #fff;
+  }
+  input.search-txt.active:-ms-input-placeholder {
+    color: #fff;
+  }
+  input.search-txt.active::-ms-input-placeholder {
+    color: #fff;
   }
   input.search-txt.active::placeholder {
     color: #fff;

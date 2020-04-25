@@ -25,6 +25,15 @@ $paddings: (1, 2, 3, 4);
     right: 0 !important;
 }
 
+.typing-color {
+    font-weight: bold;
+    color: green;
+}
+
+.no-display {
+    display: none;
+}
+
 .actions-mobile.comeout{
     display: grid;
 }
@@ -76,3 +85,4 @@ $paddings: (1, 2, 3, 4);
         }
     }
 }
+
